@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import styles from '../styles/Home.module.css';
 
 export async function getStaticProps() {
   const allHotels = await fetch(
@@ -15,13 +14,13 @@ export async function getStaticProps() {
 
 export default function Home({ hotels }) {
   return (
-    <div className={styles.container}>
+    <div className={}>
       <Head>
         <title>Hotels</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>LANDING PAGE TO BE BUILT</main>
+      <main className={}>LANDING PAGE TO BE BUILT</main>
     </div>
   );
 }
