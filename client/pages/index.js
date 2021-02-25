@@ -2,9 +2,9 @@ import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 
 export async function getStaticProps() {
-  const allHotels = await fetch('http://localhost:4000/').then(data =>
-    data.json()
-  );
+  const allHotels = await fetch(
+    'http://localhost:4000/?starRating[gte]=4'
+  ).then(data => data.json());
   console.log(allHotels);
   return {
     props: {
