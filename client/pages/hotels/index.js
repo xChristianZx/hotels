@@ -1,4 +1,4 @@
-import HotelItem from '../components/hotels/HotelItem';
+import HotelItem from '../../components/hotels/HotelItem';
 
 export async function getStaticProps() {
   const allHotels = await fetch(
