@@ -1,8 +1,9 @@
+import HotelItem from '../components/hotels/HotelItem';
+
 export async function getStaticProps() {
   const allHotels = await fetch(
-    'http://localhost:4000/?starRating[gte]=4'
+    'http://localhost:4000/?starRating[gte]=5'
   ).then(data => data.json());
-  console.log(allHotels);
   return {
     props: {
       hotels: allHotels.data,
@@ -11,21 +12,15 @@ export async function getStaticProps() {
 }
 
 export default function Hotels({ hotels }) {
+  console.log(hotels);
   function renderList(list) {
-    return list.map(item => (
-      <li key={item.hotelId}>
-        <div>
-          <img width={100} height={100} src={item.images[0].url} />
-        </div>
-        <div>
-          <h2>{item.name}</h2>
-        </div>
-      </li>
-    ));
+    return (
+      <ul className="flex flex-col flex-grow p-2">
+        {list.map(hotel => (
+          <HotelItem key={hotel.hotelId} hotel={hotel} />
+        ))}
+      </ul>
+    );
   }
-  return (
-    <div>
-      <ul>{hotels ? renderList(hotels) : <p>No List!</p>}</ul>
-    </div>
-  );
+  return <div>{hotels ? renderList(hotels) : <p>No List!</p>}</div>;
 }
