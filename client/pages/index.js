@@ -14,13 +14,13 @@ export async function getStaticProps() {
 
 export default function Home({ hotels }) {
   return (
-    <div className={}>
+    <div>
       <Head>
         <title>Hotels</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={}>LANDING PAGE TO BE BUILT</main>
+      <main>LANDING PAGE TO BE BUILT</main>
     </div>
   );
 }
