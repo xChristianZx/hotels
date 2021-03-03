@@ -31,7 +31,7 @@ export default function Header() {
               </Link>
             </li>
             <li className="flex flex-col justify-center items-center">
-              <Link href="auth/login">
+              <Link href="/auth/login">
                 <a className="flex flex-col justify-center items-center">
                   <svg
                     className="w-6 h-6"
