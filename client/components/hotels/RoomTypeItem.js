@@ -11,7 +11,11 @@ export default function RoomTypeItem({ room }) {
           quality={100}
           loading="eager"
           src={room.images[0].url}
-          alt={`Image of ${room.name}`}
+          alt={
+            room.images[0].altText
+              ? room.images[0].altText
+              : `Image of ${room.name}`
+          }
         />
       </div>
       <div className="flex flex-col justify-center items-center p-4 w-full min-h-1/2 border-gray-100 border">
