@@ -1,22 +1,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import Carousel from '../carousel/Carousel';
 
 export default function RoomTypeItem({ room }) {
   return (
-    <li className="flex flex-col lg:flex-row justify-center items-center min-h-screen h-screen w-full mb-2 p-4 bg-gray-50">
-      <div className="relative p-2 w-full min-h-1/2 shadow-xl">
-        <Image
-          layout="fill"
-          objectFit="cover"
-          quality={100}
-          loading="eager"
-          src={room.images[0].url}
-          alt={
-            room.images[0].altText
-              ? room.images[0].altText
-              : `Image of ${room.name}`
-          }
-        />
+    <li className="flex flex-col lg:flex-row justify-center items-center min-h-screen h-screen lg:h-auto w-full mb-2 p-4 bg-gray-50">
+      <div className="relative p-2 w-full min-h-1/2 shadow-xl lg:w-1/2 lg:self-stretch">
+        <Carousel images={room.images} />
       </div>
       <div className="flex flex-col justify-start items-center py-4 lg:px-6 w-full h-1/2 min-h-1/2">
         {/* Description */}
