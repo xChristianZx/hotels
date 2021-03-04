@@ -5,7 +5,7 @@ import RoomTypeItem from '../../components/hotels/RoomTypeItem';
 const ShowHotel = ({ hotel }) => {
   function renderRoomTypesList(list) {
     return (
-      <ul className="flex flex-col flex-grow p-2">
+      <ul className="flex flex-col flex-grow p-4">
         {list.map(room => (
           <RoomTypeItem key={room.roomTypeId} room={room} />
         ))}
