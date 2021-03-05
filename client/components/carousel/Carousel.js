@@ -1,9 +1,13 @@
 import Image from 'next/image';
-import SwiperCore, { Navigation } from 'swiper';
+import SwiperCore, { A11y, EffectFade, Lazy, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper-bundle.min.css';
+import 'swiper/swiper.min.css';
+import 'swiper/components/a11y/a11y.min.css';
+import 'swiper/components/effect-fade/effect-fade.min.css';
+import 'swiper/components/lazy/lazy.min.css';
+import 'swiper/components/navigation/navigation.min.css';
 
-SwiperCore.use([Navigation]);
+SwiperCore.use([Navigation, Lazy, EffectFade, A11y]);
 
 export default function Carousel(props) {
   const { images } = props;
@@ -11,7 +15,7 @@ export default function Carousel(props) {
   const imageMap = images => {
     return images.map((image, i) => {
       return (
-        <SwiperSlide key={image.url}>
+        <SwiperSlide className="bg-gray-200" key={image.url}>
           <Image
             layout="fill"
             objectFit="cover"
@@ -27,9 +31,11 @@ export default function Carousel(props) {
 
   return (
     <Swiper
+      a11y
       className="p-0 m-0 w-full h-full"
+      effect="fade"
       navigation
-      spaceBetween={5}
+      spaceBetween={30}
       slidesPerView={1}
     >
       {imageMap(images)}
