@@ -1,4 +1,5 @@
 import HotelItem from '../../components/hotels/HotelItem';
+import SearchBar from '../../components/searchbar/SearchBar';
 
 export async function getStaticProps() {
   const allHotels = await fetch(
@@ -21,5 +22,10 @@ export default function Hotels({ hotels }) {
       </ul>
     );
   }
-  return <div>{hotels ? renderList(hotels) : <p>No List!</p>}</div>;
+  return (
+    <>
+      <SearchBar />
+      <div>{hotels ? renderList(hotels) : <p>No List!</p>}</div>
+    </>
+  );
 }
