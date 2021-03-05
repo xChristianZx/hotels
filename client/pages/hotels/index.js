@@ -12,7 +12,6 @@ export async function getStaticProps() {
 }
 
 export default function Hotels({ hotels }) {
-  console.log(hotels);
   function renderList(list) {
     return (
       <ul className="flex flex-col flex-grow p-2">
