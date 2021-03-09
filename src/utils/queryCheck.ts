@@ -10,7 +10,7 @@ interface IClientQuery {
 /**
  * Checks the query for parameters that need to be converted
  * according to Impala API specs.
- * 
+ *
  * https://docs.impala.travel/docs/booking-api/docs/good-to-know/dates-currencies-standards.md#country-codes
  *
  *  @export
@@ -19,11 +19,11 @@ interface IClientQuery {
  */
 export async function queryCheck(query: IClientQuery) {
   try {
-    let queryObj = {};
+    let queryObj = { ...query };
     if (query.hasOwnProperty('country')) {
       const country = query.country!.eq;
       const ISOCountryCode = convertCountryToCode(country);
-      queryObj = { ...query, country: { eq: ISOCountryCode } };
+      queryObj['country'] = { eq: ISOCountryCode };
     }
     return queryObj;
   } catch (error) {
