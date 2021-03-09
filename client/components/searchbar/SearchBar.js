@@ -1,22 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Input } from '../ui/Input';
 import { MIN_START_DATE } from '../../utils/helper';
 
-export default function SearchBar() {
+export default function SearchBar(props) {
   const [destination, setDestination] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const { setUrl, buttonName } = props;
 
-  const onSubmitHandler = e => {
+  const onSubmitHandler = async e => {
     e.preventDefault();
     console.log(destination, startDate, endDate);
+    const url = `http://localhost:4000/?starRating[gte]=4&start=${startDate}&end=${endDate}&country[eq]=${destination}`;
+    setUrl(url);
   };
 
   return (
-    <div className="border-b w-full">
+    <div className="flex border-b w-full justify-center">
       <form
+        className="flex flex-col w-full h-1/2 space-y-2 justify-center items-center p-4 lg:flex-row lg:justify-around lg:space-y-0 lg:space-x-8 xl:w-3/4"
         onSubmit={onSubmitHandler}
-        className="flex flex-col h-1/2 space-y-2 justify-center items-center p-4 "
       >
         <Input
           labelName="destination"
@@ -28,7 +32,7 @@ export default function SearchBar() {
           value={destination}
         />
         <Input
-          labelName={'Start Date'}
+          labelName={'Check In'}
           minValue={MIN_START_DATE}
           name={'start-date'}
           placeholder={'start-date'}
@@ -38,7 +42,7 @@ export default function SearchBar() {
           value={startDate}
         />
         <Input
-          labelName={'End Date'}
+          labelName={'Check Out'}
           minValue={startDate}
           name={'end-date'}
           placeholder={'end-date'}
@@ -49,9 +53,9 @@ export default function SearchBar() {
         />
         <button
           type="submit"
-          className="flex items-stretch justify-center px-8 py-4 border-b border-gray-900 text-base text-white font-light bg-gray-900 hover:bg-gray-800 focus:outline-none"
+          className="flex items-stretch justify-center lg:self-end px-8 py-2 border-b border-gray-900 text-base text-white font-light bg-gray-900 hover:bg-gray-800 focus:outline-none"
         >
-          Check Availability
+          {buttonName || 'Check Availability'}
         </button>
       </form>
     </div>
