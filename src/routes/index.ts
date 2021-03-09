@@ -19,12 +19,12 @@ router.get('/', async (req: Request, res: Response) => {
 
     const response = await axios.get(BASE_URL, {
       headers: { 'x-api-key': process.env.HOTEL_SANDBOX_KEY },
-      params: { size: 10, sortBy: { rating: 'desc' }, ...convertedQuery },
+      params: { ...convertedQuery, size: 10, sortBy: 'rating:desc' },
       paramsSerializer: params => {
         return qs.stringify(params, { encode: false });
       },
     });
-    // console.log(response.data);
+    // console.log('response', response);
     res.json(response.data);
   } catch (error) {
     console.error(error);
