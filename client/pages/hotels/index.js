@@ -3,9 +3,9 @@ import axios from 'axios';
 import HotelItem from '../../components/hotels/HotelItem';
 import SearchBar from '../../components/searchbar/SearchBar';
 
-export default function Hotels() {
+export default function Hotels(props) {
+  const { url } = props;
   const [hotels, setHotels] = useState([]);
-  const [url, setUrl] = useState('http://localhost:4000/?starRating[gte]=4');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function Hotels() {
   }
   return (
     <>
-      <SearchBar setUrl={setUrl} url={url} buttonName="Update" />
+      <SearchBar {...props} buttonName="Update" />
       <div className="flex w-full justify-center">
         {isLoading ? (
           <div className="flex w-full h-52 justify-center items-center">

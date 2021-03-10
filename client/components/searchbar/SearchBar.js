@@ -4,10 +4,17 @@ import { Input } from '../ui/Input';
 import { MIN_START_DATE } from '../../utils/helper';
 
 export default function SearchBar(props) {
-  const [destination, setDestination] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const { setUrl, buttonName } = props;
+  const {
+    setUrl,
+    buttonName,
+    destination,
+    setDestination,
+    startDate,
+    setStartDate,
+    endDate,
+    setEndDate,
+  } = props;
+  console.log(props);
 
   const onSubmitHandler = async e => {
     e.preventDefault();
@@ -53,7 +60,7 @@ export default function SearchBar(props) {
         />
         <button
           type="submit"
-          className="flex items-stretch justify-center lg:self-end px-8 py-2 border-b border-gray-900 text-base text-white font-light bg-gray-900 hover:bg-gray-800 focus:outline-none"
+          className="flex items-stretch justify-center lg:self-end px-8 py-2 border-b border-gray-900 text-base text-white font-light bg-gray-900 hover:bg-gray-800"
         >
           {buttonName || 'Check Availability'}
         </button>
