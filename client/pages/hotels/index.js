@@ -4,8 +4,7 @@ import HotelItem from '../../components/hotels/HotelItem';
 import SearchBar from '../../components/searchbar/SearchBar';
 
 export default function Hotels(props) {
-  const { url } = props;
-  const [hotels, setHotels] = useState([]);
+  const { url, hotels, setHotels } = props;
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
