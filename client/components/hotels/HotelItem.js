@@ -3,7 +3,15 @@ import Image from 'next/image';
 import Carousel from '../carousel/Carousel';
 import { trimHotelName } from '../../utils/helper';
 
-export default function HotelItem({ hotel }) {
+export default function HotelItem({ hotel, startDate, endDate }) {
+  function buildShowRouteUrl(hotelId, startDate, endDate) {
+    let baseUrl = `/hotels/${hotelId}`;
+    if (startDate && endDate) {
+      const qStr = `?start=${startDate}&end=${endDate}`;
+      baseUrl = baseUrl + qStr;
+    }
+    return baseUrl;
+  }
   return (
     <li className="flex flex-col lg:flex-row justify-center items-center min-h-screen h-screen lg:h-auto w-full mb-2 p-4 bg-gray-50">
       <div className="relative p-2 w-full min-h-1/2 shadow-xl lg:w-1/2 lg:self-stretch">
@@ -17,7 +25,7 @@ export default function HotelItem({ hotel }) {
           {hotel.address.city}, {hotel.address.country}
         </p>
         <p className="p-4">{hotel.starRating} Stars</p>
-        <Link href={`/hotels/${hotel.hotelId}`}>
+        <Link href={buildShowRouteUrl(hotel.hotelId, startDate, endDate)}>
           <button className="flex items-center justify-center px-8 py-3 border text-base text-white font-medium bg-gray-900">
             Book Now
           </button>
