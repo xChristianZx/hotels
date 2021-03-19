@@ -33,3 +33,54 @@ export const diffInDays = (startDate, endDate) => {
 
   return pDiff.days;
 };
+
+/**
+ * Formats and styles the currency as defined by the Impala API response and the users
+ * browser language.
+ 
+* Note: this does NOT convert the currency based on exchange rate.
+ *
+ * @param {number} amt - Number to be formatted - Ex. 248.16
+ * @param {string} currencyCode - In ISO 4217 format - Ex. "GBP", "USD"
+ * @param {string} [userLanguage='en-US'] Language Identifier - Defaults to 'en-US'
+ * @returns {string} Ex. £248.16
+ */
+export const formatToCurrency = (amt, currencyCode, userLanguage = 'en-US') => {
+  // Get user language string
+  const userLang =
+    typeof window !== 'undefined' ? navigator.language : userLanguage;
+
+  // Build NumberFormat constructor
+  const currencyFormat = new Intl.NumberFormat(userLang, {
+    style: 'currency',
+    currency: currencyCode,
+  });
+
+  return currencyFormat.format(amt);
+};
+
+/**
+ * Converts whole integer amounts to floating point two decimal.
+ * Imapala sends room rate amounts as whole nums, as certain currencies are
+ * not displayed in cents.
+ *
+ * https://docs.impala.travel/docs/booking-api/docs/good-to-know/dates-currencies-standards.md#prices--currency
+ *
+ * @param {number} num - Integer to be formatted
+ * @returns {number} - Float
+ */
+export const convertToTwoDecimal = num => {
+  if (Number.isInteger(num)) {
+    return num / 100;
+  }
+};
+
+/**
+ *
+ * @param {number} amt - Total rate amount
+ * @param {number} days - Total days of stay
+ * @returns {number} - Average daily rate
+ */
+export const calcAvgDailyRate = (amt, days) => {
+  return amt / days;
+};
