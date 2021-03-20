@@ -70,9 +70,7 @@ export const formatToCurrency = (amt, currencyCode, userLanguage = 'en-US') => {
  * @returns {number} - Float
  */
 export const convertToTwoDecimal = num => {
-  if (Number.isInteger(num)) {
-    return num / 100;
-  }
+  return num / 100;
 };
 
 /**
