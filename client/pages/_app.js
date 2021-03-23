@@ -6,8 +6,7 @@ function MyApp({ Component, pageProps }) {
   const [destination, setDestination] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [url, setUrl] = useState('http://localhost:4000/?starRating[gte]=4');
-  const [hotels, setHotels] = useState([]);
+  const [url, setUrl] = useState('http://localhost:4000/');
 
   return (
     <>
@@ -22,8 +21,6 @@ function MyApp({ Component, pageProps }) {
         setEndDate={setEndDate}
         url={url}
         setUrl={setUrl}
-        hotels={hotels}
-        setHotels={setHotels}
       />
     </>
   );
