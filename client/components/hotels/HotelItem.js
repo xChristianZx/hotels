@@ -3,11 +3,15 @@ import Image from 'next/image';
 import Carousel from '../carousel/Carousel';
 import { trimHotelName } from '../../utils/helper';
 
-export default function HotelItem({ hotel, startDate, endDate }) {
+export default function HotelItem({ hotel, destination, startDate, endDate }) {
   function buildShowRouteUrl(hotelId, startDate, endDate) {
-    let baseUrl = `/hotels/${hotelId}`;
+    let baseUrl = `/hotels/${hotelId}?`;
+    if (destination && startDate && endDate) {
+      const qStr = `country%5Beq%5D=${destination}&`;
+      baseUrl = baseUrl + qStr;
+    }
     if (startDate && endDate) {
-      const qStr = `?start=${startDate}&end=${endDate}`;
+      const qStr = `start=${startDate}&end=${endDate}`;
       baseUrl = baseUrl + qStr;
     }
     return baseUrl;

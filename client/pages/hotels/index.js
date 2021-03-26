@@ -76,20 +76,21 @@ export default function Hotels(props) {
     fetchData();
   }, [url]);
 
-  function renderList(list) {
+  const renderList = list => {
     return (
       <ul className="flex flex-col p-2 w-full 2xl:w-4/5">
         {list.map(hotel => (
           <HotelItem
             key={hotel.hotelId}
             hotel={hotel}
-            startDate={startDate}
-            endDate={endDate}
+            destination={router.query['country[eq]']}
+            startDate={router.query.start || ''}
+            endDate={router.query.end || ''}
           />
         ))}
       </ul>
     );
-  }
+  };
   return (
     <>
       <Head>
