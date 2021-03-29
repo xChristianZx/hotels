@@ -1,8 +1,56 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { trimHotelName } from '../../utils/helper';
+import SearchBar from '../../components/searchbar/SearchBar';
 import RoomTypeItem from '../../components/hotels/RoomTypeItem';
 
-const ShowHotel = ({ hotel }) => {
+export default function ShowHotel(props) {
+  const { initHotelData, searchQuery, setSearchQuery } = props;
+
+  const router = useRouter();
+  const { start, end } = router.query;
+
+  const [hotelData, setHotelData] = useState(initHotelData);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (router.query) {
+      setSearchQuery(router.query);
+    }
+  }, [router.query]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const BASE_URL = `http://localhost:4000/${hotelData.hotelId}`;
+      const res = await axios.get(BASE_URL, {
+        params: start && end ? { start, end } : {},
+      });
+
+      if (res.status < 300) {
+        setHotelData(res.data);
+      }
+      setIsLoading(false);
+    };
+    fetchData();
+  }, [searchQuery]);
+
+  const searchBarOnUpdateHandler = (destination, startDate, endDate) => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          hotelId: hotelData.hotelId,
+          ...(destination && { ['country[eq]']: destination }),
+          ...(startDate && endDate && { start: startDate, end: endDate }),
+        },
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
+
   function renderRoomTypesList(list) {
     return (
       <ul className="flex flex-col flex-grow p-4">

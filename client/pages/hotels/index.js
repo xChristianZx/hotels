@@ -6,52 +6,39 @@ import HotelItem from '../../components/hotels/HotelItem';
 import SearchBar from '../../components/searchbar/SearchBar';
 
 export default function Hotels(props) {
-  const {
-    destination,
-    setDestination,
-    startDate,
-    setStartDate,
-    endDate,
-    setEndDate,
-    url,
-  } = props;
+  const { initialHotels, searchQuery, setSearchQuery } = props;
 
   const router = useRouter();
   const { query } = router;
 
-  const [hotels, setHotels] = useState([]);
+  const [hotels, setHotels] = useState(initialHotels);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (query.start) {
-      setStartDate(query.start);
+    if (router.query) {
+      setSearchQuery(router.query);
     }
-    if (query.end) {
-      setEndDate(query.end);
-    }
-    if (query['country[eq]']) {
-      setDestination(query['country[eq]']);
-    }
-  }, []);
+  }, [router.query]);
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       const BASE_URL = 'http://localhost:4000/';
-      console.log('CHECK DESTINATION', destination);
-      console.log('CHECK ROUTER.QUERY[COUNTRY]', router.query['country[eq]']);
 
       const res = await axios.get(BASE_URL, {
-        params: {
-          ['country[eq]']: destination || query['country[eq]'],
-          start: startDate || query.start,
-          end: endDate || query.end,
-        },
+        params: searchQuery,
       });
       console.log('RES', res);
 
       if (res.status < 300) {
         setHotels(res.data.data);
+      }
+      setIsLoading(false);
+    };
+    fetchData();
+  }, [searchQuery]);
+
+  const searchBarOnUpdateHandler = (destination, startDate, endDate) => {
         router.push(
           {
             pathname: '/hotels',
