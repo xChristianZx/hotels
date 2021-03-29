@@ -4,8 +4,12 @@ import {
   convertToTwoDecimal,
   calcAvgDailyRate,
 } from '../../utils/helper';
+import { useRouter } from 'next/router';
 
 export default function RoomRateItem({ rates }) {
+  const router = useRouter();
+  const { start, end } = router.query;
+
   const formatRoomRate = roomRateObj => {
     const { retailRate, start, end } = roomRateObj;
     const { amount, currency } = retailRate.total;
@@ -38,9 +42,13 @@ export default function RoomRateItem({ rates }) {
         <div className="flex flex-col justify-center items-end">
           {rates.length > 0 ? (
             formatRoomRate(rates[0])
-          ) : (
+          ) : start && end ? (
             <span className="text-sm italic">
               Not available for these dates
+            </span>
+          ) : (
+            <span className="text-sm italic">
+              Please enter your dates of stay to see room rates
             </span>
           )}
         </div>
