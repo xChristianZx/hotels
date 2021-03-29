@@ -107,9 +107,8 @@ export default function Hotels(props) {
   );
 }
 
-export async function getServerSideProps(props) {
-  const { query } = props;
-  // console.log('SSR Query', query);
+export async function getServerSideProps(ctx) {
+  const { query } = ctx;
   const BASE_URL = 'http://localhost:4000';
   const res = await axios.get(BASE_URL, {
     params: {
@@ -124,11 +123,7 @@ export async function getServerSideProps(props) {
 
   return {
     props: {
-      hotels: data,
-      destination: query['country[eq]'] || '',
-      startDate: query.start || '',
-      endDate: query.end || '',
-      url: BASE_URL + res.request.path,
+      initialHotels: data,
     },
   };
 }

@@ -60,13 +60,41 @@ export default function ShowHotel(props) {
       </ul>
     );
   }
-  return hotel ? renderRoomTypesList(hotel.roomTypes) : <p>Loading...</p>;
-};
-
-export async function getServerSideProps({ params }) {
-  const res = await fetch(`http://localhost:4000/${params.hotelId}`);
-  const data = await res.json();
-  return { props: { hotel: data } };
+  return (
+    <>
+      <Head>
+        <title>
+          Hotels - {hotelData ? trimHotelName(hotelData.name) : ''}
+          {start && end && `- ${start}-${end}`}
+        </title>
+      </Head>
+      <SearchBar
+        {...props}
+        onUpdateHandler={searchBarOnUpdateHandler}
+        buttonName="Update"
+      />
+      {!isLoading || Object.keys(hotelData).length > 0 ? (
+        renderRoomTypesList(hotelData.roomTypes)
+      ) : (
+        <p>Loading...</p>
+      )}
+    </>
+  );
 }
 
-export default ShowHotel;
+export async function getServerSideProps(ctx) {
+  const { query } = ctx;
+
+  const BASE_URL = `http://localhost:4000/${query.hotelId}`;
+  const res = await axios.get(BASE_URL, {
+    params:
+      query.start && query.end ? { start: query.start, end: query.end } : {},
+  });
+
+  const data = await res.data;
+  return {
+    props: {
+      initHotelData: data,
+    },
+  };
+}
