@@ -39,29 +39,18 @@ export default function Hotels(props) {
   }, [searchQuery]);
 
   const searchBarOnUpdateHandler = (destination, startDate, endDate) => {
-        router.push(
-          {
-            pathname: '/hotels',
-            query: {
-              ...((destination || router.query['country[eq]']) && {
-                ['country[eq]']: destination || router.query['country[eq]'],
-              }),
-              ...((startDate || router.query.start) && {
-                start: startDate || router.query.start,
-              }),
-              ...((endDate || router.query.end) && {
-                end: endDate || router.query.end,
-              }),
-            },
-          },
-          undefined,
-          { shallow: true }
-        );
-      }
-      setIsLoading(false);
-    };
-    fetchData();
-  }, [url]);
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          ...(destination && { ['country[eq]']: destination }),
+          ...(startDate && endDate && { start: startDate, end: endDate }),
+        },
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
 
   const renderList = list => {
     return (
@@ -89,7 +78,11 @@ export default function Hotels(props) {
           {query.start && query.end && `- ${query.start}-${query.end}`}
         </title>
       </Head>
-      <SearchBar {...props} buttonName="Update" />
+      <SearchBar
+        {...props}
+        buttonName="Update"
+        onUpdateHandler={searchBarOnUpdateHandler}
+      />
       <div className="flex w-full justify-center">
         {isLoading ? (
           <div className="flex w-full h-52 justify-center items-center">

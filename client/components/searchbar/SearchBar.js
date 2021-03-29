@@ -4,24 +4,31 @@ import { Input } from '../ui/Input';
 import { MIN_START_DATE } from '../../utils/helper';
 
 export default function SearchBar(props) {
-  const {
-    setUrl,
-    buttonName,
-    destination,
-    setDestination,
-    startDate,
-    setStartDate,
-    endDate,
-    setEndDate,
-  } = props;
-  console.log(props);
+  const { buttonName, onUpdateHandler } = props;
+
+  const router = useRouter();
+  const { query } = router;
+
+  const [destination, setDestination] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const onSubmitHandler = async e => {
     e.preventDefault();
-    console.log(destination, startDate, endDate);
-    const url = `http://localhost:4000/?starRating[gte]=4&start=${startDate}&end=${endDate}&country[eq]=${destination}`;
-    setUrl(url);
+    onUpdateHandler(destination, startDate, endDate);
   };
+
+  useEffect(() => {
+    if (query['country[eq]']) {
+      setDestination(query['country[eq]']);
+    }
+    if (query.start) {
+      setStartDate(query.start);
+    }
+    if (query.end) {
+      setEndDate(query.end);
+    }
+  }, [router.query]);
 
   return (
     <div className="flex border-b w-full justify-center">
