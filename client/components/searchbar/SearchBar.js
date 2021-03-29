@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import axios from 'axios';
 import { Input } from '../ui/Input';
 import { MIN_START_DATE } from '../../utils/helper';
@@ -36,15 +37,17 @@ export default function SearchBar(props) {
         className="flex flex-col w-full h-1/2 space-y-2 justify-center items-center p-4 lg:flex-row lg:justify-around lg:space-y-0 lg:space-x-8 xl:w-3/4"
         onSubmit={onSubmitHandler}
       >
-        <Input
-          labelName="destination"
-          name={'destination'}
-          placeholder={'Where do you want to go?'}
-          onChangeHandler={setDestination}
-          showLabel={true}
-          type={'text'}
-          value={destination}
-        />
+        {router.pathname !== '/hotels/[hotelId]' && (
+          <Input
+            labelName="destination"
+            name={'destination'}
+            placeholder={'Where do you want to go?'}
+            onChangeHandler={setDestination}
+            showLabel={true}
+            type={'text'}
+            value={destination}
+          />
+        )}
         <Input
           labelName={'Check In'}
           minValue={MIN_START_DATE}
