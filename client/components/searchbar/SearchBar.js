@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import { DateTime } from 'luxon';
 import { Input } from '../ui/Input';
 import { MIN_START_DATE } from '../../utils/helper';
 
@@ -18,6 +19,12 @@ export default function SearchBar(props) {
     e.preventDefault();
     onUpdateHandler(destination, startDate, endDate);
   };
+  useEffect(() => {
+    if (startDate > endDate) {
+      const d = DateTime.fromISO(startDate).plus({ days: 1 }).toISODate();
+      setEndDate(d);
+    }
+  }, [startDate]);
 
   useEffect(() => {
     if (query['country[eq]']) {
