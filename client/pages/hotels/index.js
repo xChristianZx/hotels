@@ -102,15 +102,12 @@ export default function Hotels(props) {
 
 export async function getServerSideProps(ctx) {
   const { query } = ctx;
+  
   const BASE_URL = 'http://localhost:4000';
   const res = await axios.get(BASE_URL, {
-    params: {
-      ['country[eq]']: query['country[eq]'],
-      start: query.start,
-      end: query.end,
-    },
+    params: query,
   });
-  console.log('SSR AXIOS RES', res);
+  // console.log('SSR AXIOS RES', res);
 
   const { data } = await res.data;
 
