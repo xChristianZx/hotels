@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from '../../config/config';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { trimHotelName } from '../../utils/helper';
