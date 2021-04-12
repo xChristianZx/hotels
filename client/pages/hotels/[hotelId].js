@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { trimHotelName } from '../../utils/helper';
 import SearchBar from '../../components/searchbar/SearchBar';
 import RoomTypeItem from '../../components/hotels/RoomTypeItem';
+import useData from '../../utils/useData/useData';
 
 export default function ShowHotel(props) {
   const { initHotelData, searchQuery, setSearchQuery } = props;
@@ -12,8 +13,11 @@ export default function ShowHotel(props) {
   const router = useRouter();
   const { start, end } = router.query;
 
-  const [hotelData, setHotelData] = useState(initHotelData);
-  const [isLoading, setIsLoading] = useState(true);
+  const [{ data, isLoading, isError }, fetchData] = useData(
+    `/hotels/${initHotelData.hotelId}`,
+    searchQuery,
+    initHotelData
+  );
 
   useEffect(() => {
     if (router.query) {
@@ -22,17 +26,7 @@ export default function ShowHotel(props) {
   }, [router.query]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await axios.get(`/hotels/${hotelData.hotelId}`, {
-        params: start && end ? { start, end } : {},
-      });
-
-      if (res.status < 300) {
-        setHotelData(res.data);
-      }
-      setIsLoading(false);
-    };
-    fetchData();
+    fetchData(searchQuery);
   }, [searchQuery]);
 
   const searchBarOnUpdateHandler = (destination, startDate, endDate) => {
@@ -40,7 +34,7 @@ export default function ShowHotel(props) {
       {
         pathname: router.pathname,
         query: {
-          hotelId: hotelData.hotelId,
+          hotelId: data.hotelId,
           ...(destination && { ['country[eq]']: destination }),
           ...(startDate && endDate && { start: startDate, end: endDate }),
         },
@@ -63,7 +57,7 @@ export default function ShowHotel(props) {
     <>
       <Head>
         <title>
-          Hotels - {hotelData ? trimHotelName(hotelData.name) : ''}
+          Hotels - {data ? trimHotelName(data.name) : ''}
           {start && end && `- ${start}-${end}`}
         </title>
       </Head>
@@ -72,10 +66,12 @@ export default function ShowHotel(props) {
         onUpdateHandler={searchBarOnUpdateHandler}
         buttonName="Update"
       />
-      {!isLoading || Object.keys(hotelData).length > 0 ? (
-        renderRoomTypesList(hotelData.roomTypes)
+      {!isLoading && Object.keys(data).length > 0 ? (
+        renderRoomTypesList(data.roomTypes)
       ) : (
-        <p>Loading...</p>
+        <div className="flex w-full h-52 justify-center items-center">
+          Loading...
+        </div>
       )}
     </>
   );

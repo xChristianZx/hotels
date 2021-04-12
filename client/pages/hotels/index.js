@@ -4,15 +4,26 @@ import { useRouter } from 'next/router';
 import axios from '../../config/config';
 import HotelItem from '../../components/hotels/HotelItem';
 import SearchBar from '../../components/searchbar/SearchBar';
+import useData from '../../utils/useData/useData';
 
 export default function Hotels(props) {
   const { initialHotels, searchQuery, setSearchQuery } = props;
 
+  // TODO - create useData reducer
+  // TODO - create useSearchQuery reducer
+
   const router = useRouter();
   const { query } = router;
 
-  const [hotels, setHotels] = useState(initialHotels);
-  const [isLoading, setIsLoading] = useState(true);
+  const [{ data, isLoading, isError }, fetchData] = useData(
+    '/hotels',
+    searchQuery,
+    initialHotels
+  );
+
+  // Data object returns { data, pagination }
+  const hotelsList = data.data;
+  const { pagination } = data;
 
   useEffect(() => {
     if (router.query) {
@@ -21,21 +32,7 @@ export default function Hotels(props) {
   }, [router.query]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      const BASE_URL = 'http://localhost:4000/';
-
-      const res = await axios.get(BASE_URL, {
-        params: searchQuery,
-      });
-      console.log('RES', res);
-
-      if (res.status < 300) {
-        setHotels(res.data.data);
-      }
-      setIsLoading(false);
-    };
-    fetchData();
+    fetchData(searchQuery);
   }, [searchQuery]);
 
   const searchBarOnUpdateHandler = (destination, startDate, endDate) => {
@@ -88,8 +85,8 @@ export default function Hotels(props) {
           <div className="flex w-full h-52 justify-center items-center">
             Loading...
           </div>
-        ) : hotels.length > 0 ? (
-          renderList(hotels)
+        ) : hotelsList.length > 0 ? (
+          renderList(hotelsList)
         ) : (
           <p>
             Sorry, there are no hotels available for your destination or dates.
@@ -106,7 +103,7 @@ export async function getServerSideProps(ctx) {
   const res = await axios.get('/hotels', { params: query });
   // console.log('SSR AXIOS RES', res);
 
-  const { data } = await res.data;
+  const data = await res.data;
 
   return {
     props: {
