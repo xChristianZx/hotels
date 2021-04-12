@@ -23,8 +23,7 @@ export default function ShowHotel(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const BASE_URL = `http://localhost:4000/${hotelData.hotelId}`;
-      const res = await axios.get(BASE_URL, {
+      const res = await axios.get(`/hotels/${hotelData.hotelId}`, {
         params: start && end ? { start, end } : {},
       });
 
@@ -85,8 +84,7 @@ export default function ShowHotel(props) {
 export async function getServerSideProps(ctx) {
   const { query } = ctx;
 
-  const BASE_URL = `http://localhost:4000/${query.hotelId}`;
-  const res = await axios.get(BASE_URL, {
+  const res = await axios.get(`/hotels/${query.hotelId}`, {
     params:
       query.start && query.end ? { start: query.start, end: query.end } : {},
   });

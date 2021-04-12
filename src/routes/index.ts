@@ -13,7 +13,7 @@ const router = express.Router();
  * bracket notation
  * Ex. starRating: {gte: 4} ==> starRating[gte]=4
  */
-router.get('/', async (req: Request, res: Response) => {
+router.get('/hotels', async (req: Request, res: Response) => {
   try {
     const convertedQuery = await queryCheck(req.query);
 

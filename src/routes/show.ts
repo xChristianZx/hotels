@@ -6,7 +6,7 @@ const router = express.Router();
 /**
  * Get a single hotel info
  * */
-router.get('/:id', async (req: Request, res: Response) => {
+router.get('/hotels/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
   const { query } = req;
 
