@@ -1,32 +1,59 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useReducer } from 'react';
 import axios from '../../config/config';
+import { FETCH_INIT, FETCH_SUCCESS, FETCH_FAILURE } from './types';
 
+function fetchDataReducer(state, action) {
+  switch (action.type) {
+    case FETCH_INIT:
+      return { ...state, isLoading: true, isError: false };
+    case FETCH_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        isError: false,
+        data: action.payload,
+      };
+    case FETCH_FAILURE:
+      return { ...state, isLoading: false, isError: true };
+    default:
+      throw new Error();
+  }
+}
+
+/**
+ * Fetches data from API
+ *
+ * @export
+ * @param {string} urlPath - URL path to endpoint
+ * @param {({}|string)} initialParams - Initial query params
+ * @param {*} initialData - Initial data
+ * @returns {[{ data, isLoading, isError }, Function]} Returns state object and setParams method
+ */
 export default function useData(urlPath, initialParams, initialData) {
-  const [data, setData] = useState(initialData);
   const [params, setParams] = useState(initialParams);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [state, dispatch] = useReducer(fetchDataReducer, {
+    data: initialData,
+    isLoading: false,
+    isError: false,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsError(false);
-      setIsLoading(true);
+      dispatch({ type: FETCH_INIT });
 
       try {
         const res = await axios(urlPath, { params });
         // console.log('HOOK RES', res);
-        setData(res.data);
+        dispatch({ type: FETCH_SUCCESS, payload: res.data });
       } catch (err) {
-        setIsError(true);
+        dispatch({ type: FETCH_FAILURE });
         console.error(err);
       }
-
-      setIsLoading(false);
     };
 
     fetchData();
   }, [params]);
 
-  return [{ data, isLoading, isError }, setParams];
+  return [state, setParams];
 }
