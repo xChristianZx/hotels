@@ -82,3 +82,17 @@ export const convertToTwoDecimal = num => {
 export const calcAvgDailyRate = (amt, days) => {
   return amt / days;
 };
+
+/**
+ * Takes an array of keys to filter from the query object.
+ *
+ * @export
+ * @param {object} query - The router.query object
+ * @param {Array<string>} keysArr - The array of keys to excluded from the query object
+ * @returns {object} - Filtered query object
+ */
+export function filterQuery(query, keysArr) {
+  return Object.keys(query)
+    .filter(item => !keysArr.includes(item))
+    .reduce((acc, key) => ({ ...acc, [key]: query[key] }), {});
+}

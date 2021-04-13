@@ -9,8 +9,6 @@ import useData from '../../utils/useData/useData';
 export default function Hotels(props) {
   const { initialHotels, searchQuery, setSearchQuery } = props;
 
-  // TODO - create useSearchQuery reducer
-
   const router = useRouter();
   const { query } = router;
 

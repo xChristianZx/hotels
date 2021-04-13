@@ -6,6 +6,7 @@ import { trimHotelName } from '../../utils/helper';
 import SearchBar from '../../components/searchbar/SearchBar';
 import RoomTypeItem from '../../components/hotels/RoomTypeItem';
 import useData from '../../utils/useData/useData';
+import { filterQuery } from '../../utils/helper';
 
 export default function ShowHotel(props) {
   const { initHotelData, searchQuery, setSearchQuery } = props;
@@ -21,7 +22,9 @@ export default function ShowHotel(props) {
 
   useEffect(() => {
     if (router.query) {
-      setSearchQuery(router.query);
+      // Remove hotelId from searchQuery
+      const filteredQuery = filterQuery(router.query, ['hotelId']);
+      setSearchQuery(filteredQuery);
     }
   }, [router.query]);
 
