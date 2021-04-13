@@ -49,7 +49,7 @@ export default function ShowHotel(props) {
 
   function renderRoomTypesList(list) {
     return (
-      <ul className="flex flex-col flex-grow p-4">
+      <ul className="flex flex-col flex-grow p-4 bg-gray-50">
         {list.map(room => (
           <RoomTypeItem key={room.roomTypeId} room={room} />
         ))}
@@ -72,7 +72,7 @@ export default function ShowHotel(props) {
       {!isLoading && Object.keys(data).length > 0 ? (
         renderRoomTypesList(data.roomTypes)
       ) : (
-        <div className="flex w-full h-52 justify-center items-center">
+        <div className="flex w-full flex-grow justify-center items-center bg-gray-50">
           Loading...
         </div>
       )}

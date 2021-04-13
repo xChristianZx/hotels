@@ -77,9 +77,9 @@ export default function Hotels(props) {
         buttonName="Update"
         onUpdateHandler={searchBarOnUpdateHandler}
       />
-      <div className="flex w-full justify-center">
+      <div className="flex w-full flex-grow justify-center bg-gray-50">
         {isLoading ? (
-          <div className="flex w-full h-52 justify-center items-center">
+          <div className="flex w-full justify-center items-center">
             Loading...
           </div>
         ) : hotelsList.length > 0 ? (

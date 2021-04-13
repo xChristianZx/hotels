@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body {
+  @apply min-h-screen;
+  @apply bg-gray-50;
+}
+
+#__next {
+  @apply flex;
+  @apply flex-col;
+  @apply min-h-screen;
+}
+
 /* Overrides for swiper pkg */
 :root {
   --swiper-navigation-color: white !important;

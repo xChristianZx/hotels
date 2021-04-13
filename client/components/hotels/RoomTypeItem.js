@@ -7,7 +7,7 @@ export default function RoomTypeItem({ room }) {
   // console.log('RoomTypeItem', room);
 
   return (
-    <li className="flex flex-col lg:flex-row justify-center items-center min-h-screen h-screen lg:h-auto w-full mb-2 p-4 bg-gray-50">
+    <li className="flex flex-col lg:flex-row justify-center items-center h-screen lg:h-auto w-full mb-2 p-4 bg-white">
       <div className="relative p-2 w-full min-h-1/2 shadow-xl lg:w-1/2 lg:self-stretch">
         <Carousel images={room.images} />
       </div>

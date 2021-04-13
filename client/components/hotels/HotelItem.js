@@ -17,11 +17,11 @@ export default function HotelItem({ hotel, destination, startDate, endDate }) {
     return baseUrl;
   }
   return (
-    <li className="flex flex-col lg:flex-row justify-center items-center min-h-screen h-screen lg:h-auto w-full mb-2 p-4 bg-gray-50">
+    <li className="flex flex-col lg:flex-row justify-center items-center h-screen lg:h-auto w-full mb-2 p-4 bg-white">
       <div className="relative p-2 w-full min-h-1/2 shadow-xl lg:w-1/2 lg:self-stretch">
         <Carousel images={hotel.images} />
       </div>
-      <div className="flex flex-col justify-center items-center p-4 w-full min-h-1/2 border-gray-100 border bg-gray-50">
+      <div className="flex flex-col justify-center items-center p-4 w-full min-h-1/2 bg-white">
         <p className="text-2xl font-thin font-serif text-center">
           {trimHotelName(hotel.name)}
         </p>
