@@ -48,10 +48,7 @@ export default function SearchBar({ buttonName, onUpdateHandler }) {
         onSubmit={onSubmitHandler}
       >
         {pathname !== '/hotels/[hotelId]' && (
-          <DestinationComboBox
-            initDestination={destination.length > 0 && destination}
-            selectedItemChangeHandler={setDestination}
-          />
+          <DestinationComboBox selectedItemChangeHandler={setDestination} />
         )}
 
         <Input

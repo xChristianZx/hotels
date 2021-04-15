@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useCombobox } from 'downshift';
+import { useRouter } from 'next/router';
 import { COUNTRIES_LIST } from '../../utils/countriesList';
 
 /**
@@ -7,11 +8,10 @@ import { COUNTRIES_LIST } from '../../utils/countriesList';
  * render initDestination. See next/dynamic, {useSRR:false}
  */
 
-export default function DestinationComboBox({
-  initDestination,
-  selectedItemChangeHandler,
-}) {
+export default function DestinationComboBox({ selectedItemChangeHandler }) {
   const [inputItems, setInputItems] = useState(COUNTRIES_LIST);
+
+  const { query } = useRouter();
 
   const {
     isOpen,
@@ -24,7 +24,8 @@ export default function DestinationComboBox({
     getItemProps,
   } = useCombobox({
     items: inputItems,
-    initialSelectedItem: initDestination,
+    initialSelectedItem: query['country[eq]'] ? query['country[eq]'] : null,
+    initialInputValue: query['country[eq]'] ? query['country[eq]'] : '',
     onSelectedItemChange: ({ selectedItem }) =>
       selectedItemChangeHandler(selectedItem),
     onInputValueChange: ({ inputValue }) => {
