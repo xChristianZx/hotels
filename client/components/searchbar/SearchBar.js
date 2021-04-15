@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 import axios from 'axios';
 import { DateTime } from 'luxon';
 import { Input } from '../ui/Input';
 import { MIN_START_DATE } from '../../utils/helper';
 
-export default function SearchBar(props) {
-  const { buttonName, onUpdateHandler } = props;
+const DestinationComboBox = dynamic(() => import('./DestinationComboBox'), {
+  ssr: false,
+});
 
-  const router = useRouter();
-  const { query } = router;
+export default function SearchBar({ buttonName, onUpdateHandler }) {
+  const { query, pathname } = useRouter();
 
   const [destination, setDestination] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -19,6 +21,7 @@ export default function SearchBar(props) {
     e.preventDefault();
     onUpdateHandler(destination, startDate, endDate);
   };
+
   useEffect(() => {
     if (startDate > endDate) {
       const d = DateTime.fromISO(startDate).plus({ days: 1 }).toISODate();
@@ -36,7 +39,7 @@ export default function SearchBar(props) {
     if (query.end) {
       setEndDate(query.end);
     }
-  }, [router.query]);
+  }, [query]);
 
   return (
     <div className="flex border-b w-full justify-center">
@@ -44,17 +47,13 @@ export default function SearchBar(props) {
         className="flex flex-col w-full h-1/2 space-y-2 justify-center items-center p-4 lg:flex-row lg:justify-around lg:space-y-0 lg:space-x-8 xl:w-3/4"
         onSubmit={onSubmitHandler}
       >
-        {router.pathname !== '/hotels/[hotelId]' && (
-          <Input
-            labelName="destination"
-            name={'destination'}
-            placeholder={'Where do you want to go?'}
-            onChangeHandler={setDestination}
-            showLabel={true}
-            type={'text'}
-            value={destination}
+        {pathname !== '/hotels/[hotelId]' && (
+          <DestinationComboBox
+            initDestination={destination.length > 0 && destination}
+            selectedItemChangeHandler={setDestination}
           />
         )}
+
         <Input
           labelName={'Check In'}
           minValue={MIN_START_DATE}
