@@ -44,7 +44,7 @@ export default function SearchBar({ buttonName, onUpdateHandler }) {
   return (
     <div className="flex border-b w-full justify-center">
       <form
-        className="flex flex-col w-full h-1/2 space-y-2 justify-center items-center p-4 lg:flex-row lg:justify-around lg:space-y-0 lg:space-x-8 xl:w-3/4"
+        className="flex flex-col w-full h-1/2 space-y-2 justify-center items-center p-4 lg:flex-row lg:justify-around lg:space-y-0 lg:space-x-8 xl:w-4/5"
         onSubmit={onSubmitHandler}
       >
         {pathname !== '/hotels/[hotelId]' && (
