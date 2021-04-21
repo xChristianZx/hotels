@@ -8,7 +8,10 @@ import { COUNTRIES_LIST } from '../../utils/countriesList';
  * render initDestination. See next/dynamic, {useSRR:false}
  */
 
-export default function DestinationComboBox({ selectedItemChangeHandler }) {
+export default function DestinationComboBox({
+  selectedItem,
+  selectedItemChangeHandler,
+}) {
   const [inputItems, setInputItems] = useState(COUNTRIES_LIST);
 
   const { query } = useRouter();
@@ -24,6 +27,7 @@ export default function DestinationComboBox({ selectedItemChangeHandler }) {
     getItemProps,
   } = useCombobox({
     items: inputItems,
+    selectedItem,
     initialSelectedItem: query['country[eq]'] ? query['country[eq]'] : null,
     initialInputValue: query['country[eq]'] ? query['country[eq]'] : '',
     onSelectedItemChange: ({ selectedItem }) =>
