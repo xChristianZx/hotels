@@ -3,11 +3,6 @@ import { useCombobox } from 'downshift';
 import { useRouter } from 'next/router';
 import { COUNTRIES_LIST } from '../../utils/countriesList';
 
-/**
- * Note: needs to be dynamically imported to parent component to
- * render initDestination. See next/dynamic, {useSRR:false}
- */
-
 export default function DestinationComboBox({
   selectedItem,
   selectedItemChangeHandler,
@@ -26,6 +21,8 @@ export default function DestinationComboBox({
     highlightedIndex,
     getItemProps,
   } = useCombobox({
+    // 'id' Handles SSR warning error
+    id: 'destination-combo-box',
     items: inputItems,
     selectedItem,
     initialSelectedItem: query['country[eq]'] ? query['country[eq]'] : null,

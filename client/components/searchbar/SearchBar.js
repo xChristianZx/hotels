@@ -5,10 +5,7 @@ import axios from 'axios';
 import { DateTime } from 'luxon';
 import { Input } from '../ui/Input';
 import { MIN_START_DATE } from '../../utils/helper';
-
-const DestinationComboBox = dynamic(() => import('./DestinationComboBox'), {
-  ssr: false,
-});
+import DestinationComboBox from './DestinationComboBox';
 
 export default function SearchBar({ buttonName, onUpdateHandler }) {
   const { query, pathname } = useRouter();
