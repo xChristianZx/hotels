@@ -96,3 +96,7 @@ export function filterQuery(query, keysArr) {
     .filter(item => !keysArr.includes(item))
     .reduce((acc, key) => ({ ...acc, [key]: query[key] }), {});
 }
+
+export function getRandomIntRange(min = 0, max) {
+  return Math.floor(Math.random() * (max - min) + min);
+}

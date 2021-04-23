@@ -39,7 +39,8 @@ export default function SearchBar({ buttonName, onUpdateHandler }) {
   }, [query]);
 
   return (
-    <div className="flex border-b w-full justify-center">
+    <div className="flex flex-col border-b w-full justify-center items-center">
+      
       <form
         className="flex flex-col w-full h-1/2 space-y-2 justify-center items-center p-4 lg:flex-row lg:justify-around lg:space-y-0 lg:space-x-8 xl:w-4/5"
         onSubmit={onSubmitHandler}
@@ -50,27 +51,28 @@ export default function SearchBar({ buttonName, onUpdateHandler }) {
             selectedItemChangeHandler={setDestination}
           />
         )}
-
-        <Input
-          labelName={'Check In'}
-          minValue={MIN_START_DATE}
-          name={'start-date'}
-          placeholder={'start-date'}
-          onChangeHandler={setStartDate}
-          showLabel={true}
-          type={'date'}
-          value={startDate}
-        />
-        <Input
-          labelName={'Check Out'}
-          minValue={startDate}
-          name={'end-date'}
-          placeholder={'end-date'}
-          onChangeHandler={setEndDate}
-          showLabel={true}
-          type={'date'}
-          value={endDate}
-        />
+        <div className="flex py-2 w-full space-x-6">
+          <Input
+            labelName={'Check In'}
+            minValue={MIN_START_DATE}
+            name={'start-date'}
+            placeholder={'start-date'}
+            onChangeHandler={setStartDate}
+            showLabel={true}
+            type={'date'}
+            value={startDate}
+          />
+          <Input
+            labelName={'Check Out'}
+            minValue={startDate}
+            name={'end-date'}
+            placeholder={'end-date'}
+            onChangeHandler={setEndDate}
+            showLabel={true}
+            type={'date'}
+            value={endDate}
+          />
+        </div>
         <button
           type="submit"
           className="flex items-stretch justify-center lg:self-end px-8 py-2 border-b border-gray-900 text-base text-white font-light bg-gray-900 hover:bg-gray-800"
