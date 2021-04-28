@@ -73,12 +73,14 @@ export default function SearchBar({ buttonName, onUpdateHandler }) {
             value={endDate}
           />
         </div>
-        <button
-          type="submit"
-          className="flex items-stretch justify-center lg:self-end px-8 py-2 border-b border-gray-900 text-base text-white font-light bg-gray-900 hover:bg-gray-800"
-        >
-          {buttonName || 'Check Availability'}
-        </button>
+        <div className="py-4 lg:py-0 lg:pt-6">
+          <button
+            type="submit"
+            className="flex items-stretch justify-center lg:self-end px-8 py-2 border-b border-gray-900 text-base text-white font-light bg-gray-900 hover:bg-gray-800"
+          >
+            {buttonName || 'Check Availability'}
+          </button>
+        </div>
       </form>
     </div>
   );
