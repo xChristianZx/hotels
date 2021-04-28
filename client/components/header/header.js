@@ -1,14 +1,16 @@
 import Link from 'next/link';
 
-export default function Header() {
+export default function Header(props) {
+  const { cx } = props;
+
   return (
-    <div className="border-b">
-      <div className="flex items-center justify-between h-auto w-screen px-6 py-4">
+    <div className={cx?.wrapper ? cx.wrapper : 'border-b'}>
+      <div className="flex items-center justify-between h-auto w-screen px-8 xl:px-16 py-4 ">
         <div className="p-2 font-serif text-2xl self-end">
-          <h1>Hotels</h1>
+          <Link href="/">Hotels</Link>
         </div>
         <nav className="flex p-2">
-          <ul className="flex space-x-6 font-light text-xs">
+          <ul className={`flex space-x-6 font-light text-xs ${cx?.links}`}>
             <li className="flex flex-col justify-center items-center">
               <Link href="/bookings">
                 <a className="flex flex-col justify-center items-center">

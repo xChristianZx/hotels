@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
-      <Header />
+      {router.route !== '/' && <Header />}
       <Component
         {...pageProps}
         searchQuery={searchQuery}

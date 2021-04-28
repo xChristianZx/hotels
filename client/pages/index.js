@@ -1,16 +1,13 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Header from '../components/header/header';
 import SearchBar from '../components/searchbar/SearchBar';
 import { heroImages } from '../utils/landingPageImages';
-import { getRandomIntRange } from '../utils/helper';
 
 export default function Home({ hotels }) {
   const router = useRouter();
 
-  const genRandomNum = getRandomIntRange(0, heroImages.length - 1);
-
-  // const currentHero = heroImages[genRandomNum];
   const currentHero = heroImages[0];
 
   const onClickSearchHandler = (destination, startDate, endDate) => {
@@ -27,38 +24,55 @@ export default function Home({ hotels }) {
   };
 
   return (
-    <div className="h-screen">
-      <Head>
-        <title>Hotels - Your getaway awaits...</title>
-      </Head>
-      <main className="h-full">
-        <section className="relative">
-          <div className="relative h-full">
-            <img
-              className="bg-cover w-full"
-              src={currentHero.url}
-              alt={currentHero.name}
-            />
-            <div className="absolute bottom-0 right-0 p-3 text-gray-300 hover:text-white bg-gray-400 bg-opacity-20 hover:bg-opacity-40 italic text-xs xl:text-lg">
-              <Link href={`/hotels/${currentHero.hotelId}`}>
-                <a className="">
-                  <p className="font-light">{currentHero.name}</p>
-                  <p className="font-thin">
-                    {currentHero.address.city},{' '}
-                    {currentHero.address.countryName}
-                  </p>
-                </a>
-              </Link>
+    <>
+      <div className="min-h-screen">
+        <Head>
+          <title>Hotels - Your journey awaits</title>
+        </Head>
+        <main className="h-full">
+          <section className="relative">
+            <div className="xl:absolute z-50">
+              {/* Create Header compound component? */}
+              <Header
+                cx={{
+                  wrapper: 'xl:border-0 xl:text-white',
+                  links: 'xl:font-medium',
+                }}
+              />
             </div>
-          </div>
-          <div className="bg-white bg-opacity-60 inset-x-0 xl:absolute xl:top-20">
-            <SearchBar
-              buttonName="Search"
-              onUpdateHandler={onClickSearchHandler}
-            />
-          </div>
-        </section>
-      </main>
-    </div>
+            <div className="relative">
+              <img
+                className="object-cover max-h-screen w-full"
+                src={currentHero.url}
+                alt={currentHero.name}
+              />
+              {/* <div className="absolute bottom-10 inset-x-0 text-center text-white font-extralight text-2xl xl:top-72 xl:text-3l">
+                <p className="uppercase tracking-widest w-auto">Your journey awaits</p>
+              </div> */}
+              <div className="absolute bottom-0 right-0 p-3 text-gray-300 hover:text-white bg-gray-400 bg-opacity-20 hover:bg-opacity-40 italic text-xs xl:text-lg">
+                <Link href={`/hotels/${currentHero.hotelId}`}>
+                  <a className="">
+                    <p className="font-light">{currentHero.name}</p>
+                    <p className="font-thin">
+                      {currentHero.address.city},{' '}
+                      {currentHero.address.countryName}
+                    </p>
+                  </a>
+                </Link>
+              </div>
+            </div>
+            <div className="flex justify-center w-full xl:absolute xl:top-32">
+              <div className="bg-white bg-opacity-40 w-full xl:w-5/6 border-0">
+                <SearchBar
+                  buttonName="Search"
+                  cx={{ wrapper: 'border-none' }}
+                  onUpdateHandler={onClickSearchHandler}
+                />
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </>
   );
 }

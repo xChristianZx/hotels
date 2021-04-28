@@ -7,8 +7,10 @@ import { Input } from '../ui/Input';
 import { MIN_START_DATE } from '../../utils/helper';
 import DestinationComboBox from './DestinationComboBox';
 
-export default function SearchBar({ buttonName, onUpdateHandler }) {
+export default function SearchBar({ buttonName, onUpdateHandler, cx }) {
   const { query, pathname } = useRouter();
+
+  const [isOpen, setIsOpen] = useState(true);
 
   const [destination, setDestination] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -39,10 +41,33 @@ export default function SearchBar({ buttonName, onUpdateHandler }) {
   }, [query]);
 
   return (
-    <div className="flex flex-col border-b w-full justify-center items-center">
-      
+    <div
+      className={`flex flex-col border-b w-full justify-center items-center ${cx?.wrapper}`}
+    >
+      {/* <div onClick={() => setIsOpen(!isOpen)} className="bg-purple-300 h-6">
+        <span className="absolute top-0 right-0 p-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className={`transform ${
+              isOpen && 'rotate-180'
+            } bg-blue-300 h-6 w-6`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </span>
+      </div> */}
       <form
-        className="flex flex-col w-full h-1/2 space-y-2 justify-center items-center p-4 lg:flex-row lg:justify-around lg:space-y-0 lg:space-x-8 xl:w-4/5"
+        className={`${
+          isOpen ? 'visible' : 'hidden'
+        } flex flex-col w-full h-1/2 space-y-2 justify-center items-center p-4 lg:flex-row lg:justify-around lg:space-y-0 lg:space-x-8 xl:w-5/6`}
         onSubmit={onSubmitHandler}
       >
         {pathname !== '/hotels/[hotelId]' && (
