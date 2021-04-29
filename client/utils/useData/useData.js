@@ -1,4 +1,4 @@
-import { useEffect, useState, useReducer } from 'react';
+import { useEffect, useState, useReducer, useRef } from 'react';
 import axios from '../../config/config';
 import { FETCH_INIT, FETCH_SUCCESS, FETCH_FAILURE } from './types';
 
@@ -32,6 +32,8 @@ function fetchDataReducer(state, action) {
 export default function useData(urlPath, initialParams, initialData) {
   const [params, setParams] = useState(initialParams);
 
+  const isInitialMount = useRef(true);
+
   const [state, dispatch] = useReducer(fetchDataReducer, {
     data: initialData,
     isLoading: false,
@@ -40,20 +42,23 @@ export default function useData(urlPath, initialParams, initialData) {
 
   useEffect(() => {
     const fetchData = async () => {
-      dispatch({ type: FETCH_INIT });
-
-      try {
-        const res = await axios(urlPath, { params });
-        // console.log('HOOK RES', res);
-        dispatch({ type: FETCH_SUCCESS, payload: res.data });
-      } catch (err) {
-        dispatch({ type: FETCH_FAILURE });
-        console.error(err);
+      if (isInitialMount.current) {
+        isInitialMount.current = false;
+      } else {
+        dispatch({ type: FETCH_INIT });
+        try {
+          const res = await axios(urlPath, { params });
+          // console.log('HOOK RES', res);
+          dispatch({ type: FETCH_SUCCESS, payload: res.data });
+        } catch (err) {
+          dispatch({ type: FETCH_FAILURE });
+          console.error(err);
+        }
       }
     };
 
     fetchData();
-  }, [params]);
+  }, [params['country[eq]'], params.start, params.end]);
 
   return [state, setParams];
 }
