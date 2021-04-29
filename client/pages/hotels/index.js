@@ -5,6 +5,7 @@ import axios from '../../config/config';
 import HotelItem from '../../components/hotels/HotelItem';
 import SearchBar from '../../components/searchbar/SearchBar';
 import useData from '../../utils/useData/useData';
+import usePrevious from '../../utils/usePrevious/usePrevious';
 
 export default function Hotels(props) {
   const { initialHotels, searchQuery, setSearchQuery } = props;
@@ -18,21 +19,28 @@ export default function Hotels(props) {
     initialHotels
   );
 
+  const previousQuery = usePrevious(router.query);
+
   // API data object returns { data, pagination }
   const hotelsList = data.data;
   const { pagination } = data;
 
   useEffect(() => {
-    if (router.query) {
-      setSearchQuery(router.query);
-    }
-  }, [router.query]);
+    fetchData(searchQuery);
+  }, [searchQuery['country[eq]'], searchQuery.start, searchQuery.end]);
 
   useEffect(() => {
-    fetchData(searchQuery);
-  }, [searchQuery]);
+    if (previousQuery !== router.query) {
+      console.log('useEffect setSearchQuery', previousQuery, router.query);
+      setSearchQuery(router.query);
+    }
+  }, [router.query['country[eq]'], router.query.start, router.query.end]);
 
   const searchBarOnUpdateHandler = (destination, startDate, endDate) => {
+    setSearchQuery({
+      ...(destination && { ['country[eq]']: destination }),
+      ...(startDate && endDate && { start: startDate, end: endDate }),
+    });
     router.push(
       {
         pathname: router.pathname,

@@ -5,12 +5,17 @@ import Header from '../components/header/header';
 import SearchBar from '../components/searchbar/SearchBar';
 import { heroImages } from '../utils/landingPageImages';
 
-export default function Home({ hotels }) {
+export default function Home({ searchQuery, setSearchQuery }) {
   const router = useRouter();
 
   const currentHero = heroImages[0];
 
   const onClickSearchHandler = (destination, startDate, endDate) => {
+    // Need to setSearchQuery on this route transition to prevent duplicate data fetch on '/hotels' page load route
+    setSearchQuery({
+      ...(destination && { ['country[eq]']: destination }),
+      ...(startDate && endDate && { start: startDate, end: endDate }),
+    });
     router.push(
       {
         pathname: '/hotels',

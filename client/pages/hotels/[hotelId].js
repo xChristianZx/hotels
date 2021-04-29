@@ -6,6 +6,7 @@ import { trimHotelName } from '../../utils/helper';
 import SearchBar from '../../components/searchbar/SearchBar';
 import RoomTypeItem from '../../components/hotels/RoomTypeItem';
 import useData from '../../utils/useData/useData';
+import usePrevious from '../../utils/usePrevious/usePrevious';
 import { filterQuery } from '../../utils/helper';
 
 export default function ShowHotel(props) {
@@ -14,6 +15,8 @@ export default function ShowHotel(props) {
   const router = useRouter();
   const { start, end } = router.query;
 
+  const previousQuery = usePrevious(router.query);
+
   const [{ data, isLoading, isError }, fetchData] = useData(
     `/hotels/${initHotelData.hotelId}`,
     searchQuery,
@@ -21,18 +24,22 @@ export default function ShowHotel(props) {
   );
 
   useEffect(() => {
-    if (router.query) {
-      // Remove hotelId from searchQuery
+    if (previousQuery !== router.query) {
+      // Remove hotelId from setSearchQuery update
       const filteredQuery = filterQuery(router.query, ['hotelId']);
       setSearchQuery(filteredQuery);
     }
-  }, [router.query]);
+  }, [router.query.start, router.query.end]);
 
   useEffect(() => {
     fetchData(searchQuery);
-  }, [searchQuery]);
+  }, [searchQuery.start, searchQuery.end]);
 
   const searchBarOnUpdateHandler = (destination, startDate, endDate) => {
+    setSearchQuery(prevSearchQ => ({
+      ...prevSearchQ,
+      ...(startDate && endDate && { start: startDate, end: endDate }),
+    }));
     router.push(
       {
         pathname: router.pathname,
@@ -82,10 +89,10 @@ export default function ShowHotel(props) {
 
 export async function getServerSideProps(ctx) {
   const { query } = ctx;
+  const { start, end } = query;
 
   const res = await axios.get(`/hotels/${query.hotelId}`, {
-    params:
-      query.start && query.end ? { start: query.start, end: query.end } : {},
+    params: start && end ? { start, end } : {},
   });
 
   const data = await res.data;
