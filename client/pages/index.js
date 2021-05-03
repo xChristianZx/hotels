@@ -4,8 +4,11 @@ import Link from 'next/link';
 import Header from '../components/header/header';
 import SearchBar from '../components/searchbar/SearchBar';
 import { heroImages } from '../utils/landingPageImages';
+import { useSearchQuery } from '../context/searchQueryContext';
 
-export default function Home({ searchQuery, setSearchQuery }) {
+export default function Home() {
+  const [searchQuery, setSearchQuery] = useSearchQuery();
+
   const router = useRouter();
 
   const currentHero = heroImages[0];

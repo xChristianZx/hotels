@@ -8,12 +8,15 @@ import RoomTypeItem from '../../components/hotels/RoomTypeItem';
 import useData from '../../utils/useData/useData';
 import usePrevious from '../../utils/usePrevious/usePrevious';
 import { filterQuery } from '../../utils/helper';
+import { useSearchQuery } from '../../context/searchQueryContext';
 
 export default function ShowHotel(props) {
-  const { initHotelData, searchQuery, setSearchQuery } = props;
+  const { initHotelData } = props;
 
   const router = useRouter();
   const { start, end } = router.query;
+
+  const [searchQuery, setSearchQuery] = useSearchQuery();
 
   const previousQuery = usePrevious(router.query);
 

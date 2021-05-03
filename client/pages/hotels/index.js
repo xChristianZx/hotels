@@ -6,12 +6,15 @@ import HotelItem from '../../components/hotels/HotelItem';
 import SearchBar from '../../components/searchbar/SearchBar';
 import useData from '../../utils/useData/useData';
 import usePrevious from '../../utils/usePrevious/usePrevious';
+import { useSearchQuery } from '../../context/searchQueryContext';
 
 export default function Hotels(props) {
-  const { initialHotels, searchQuery, setSearchQuery } = props;
+  const { initialHotels } = props;
 
   const router = useRouter();
   const { query } = router;
+
+  const [searchQuery, setSearchQuery] = useSearchQuery();
 
   const [{ data, isLoading, isError }, fetchData] = useData(
     '/hotels',
@@ -31,7 +34,6 @@ export default function Hotels(props) {
 
   useEffect(() => {
     if (previousQuery !== router.query) {
-      console.log('useEffect setSearchQuery', previousQuery, router.query);
       setSearchQuery(router.query);
     }
   }, [router.query['country[eq]'], router.query.start, router.query.end]);
