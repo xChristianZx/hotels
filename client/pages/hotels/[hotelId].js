@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { trimHotelName } from '../../utils/helper';
 import SearchBar from '../../components/searchbar/SearchBar';
 import RoomTypeItem from '../../components/hotels/RoomTypeItem';
+import HotelNameHeader from '../../components/hotels/HotelNameHeader';
 import useData from '../../utils/useData/useData';
 import usePrevious from '../../utils/usePrevious/usePrevious';
 import { filterQuery } from '../../utils/helper';
@@ -66,6 +67,7 @@ export default function ShowHotel(props) {
       </ul>
     );
   }
+
   return (
     <>
       <Head>
@@ -78,6 +80,11 @@ export default function ShowHotel(props) {
         {...props}
         onUpdateHandler={searchBarOnUpdateHandler}
         buttonName="Update"
+      />
+      <HotelNameHeader
+        hotelName={data.name}
+        city={data.address.city}
+        country={data.address.countryName}
       />
       {!isLoading && Object.keys(data).length > 0 ? (
         renderRoomTypesList(data.roomTypes)
