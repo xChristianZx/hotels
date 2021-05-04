@@ -23,10 +23,10 @@ export default function RoomRateItem({ rates }) {
     return (
       <>
         <div>
-          <span className="font-medium text-2xl">
+          <span className="font-medium text-xl sm:text-2xl">
             {formatToCurrency(convertToTwoDecimal(dailyAvgRate), currency.code)}
           </span>
-          <span className="text-xl font-light"> / night</span>
+          <span className="text-base sm:text-xl font-light"> / night</span>
         </div>
         <div className="font-light text-sm text-gray-700">
           <span>{formatToCurrency(fRateAmount, currency.code)}</span>
@@ -37,9 +37,9 @@ export default function RoomRateItem({ rates }) {
   };
 
   return (
-    <>
-      <div className="flex justify-end items-center w-full h-1/6 py-8">
-        <div className="flex flex-col justify-center items-end">
+    <div className="flex flex-row sm:flex-col w-full justify-around sm:justify-start items-center">
+      <div className="flex justify-center sm:justify-end items-center w-full h-full">
+        <div className="flex flex-col justify-center sm:items-end">
           {rates.length > 0 ? (
             formatRoomRate(rates[0])
           ) : start && end ? (
@@ -54,13 +54,13 @@ export default function RoomRateItem({ rates }) {
         </div>
       </div>
 
-      <div className="flex items-center justify-center py-2 w-full min-h-1/6">
+      <div className="flex items-center justify-center sm:py-2 w-full">
         {rates.length > 0 && (
           <button className=" px-8 py-3 border text-base text-white font-medium bg-gray-900 shadow-lg">
             Book Now
           </button>
         )}
       </div>
-    </>
+    </div>
   );
 }

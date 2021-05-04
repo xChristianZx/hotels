@@ -60,7 +60,7 @@ export default function ShowHotel(props) {
 
   function renderRoomTypesList(list) {
     return (
-      <ul className="flex flex-col flex-grow p-4 bg-gray-50">
+      <ul className="flex flex-col flex-grow w-full xl:max-w-screen-2xl p-4">
         {list.map(room => (
           <RoomTypeItem key={room.roomTypeId} room={room} />
         ))}
@@ -86,13 +86,15 @@ export default function ShowHotel(props) {
         city={data.address.city}
         country={data.address.countryName}
       />
-      {!isLoading && Object.keys(data).length > 0 ? (
-        renderRoomTypesList(data.roomTypes)
-      ) : (
-        <div className="flex w-full flex-grow justify-center items-center bg-gray-50">
-          Loading...
-        </div>
-      )}
+      <div className="flex flex-grow justify-center items-center w-full bg-gray-50">
+        {!isLoading && Object.keys(data).length > 0 ? (
+          renderRoomTypesList(data.roomTypes)
+        ) : (
+          <div className="flex w-full flex-grow justify-center items-center">
+            Loading...
+          </div>
+        )}
+      </div>
     </>
   );
 }
