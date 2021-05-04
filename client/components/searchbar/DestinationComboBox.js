@@ -41,7 +41,7 @@ export default function DestinationComboBox({
   return (
     <div className="relative lg:static w-full">
       <label
-        className="capitalize self-start text-gray-400 text-xs font-light pl-4"
+        className="capitalize self-start text-gray-900 text-xs font-light pl-4"
         {...getLabelProps()}
       >
         Destination

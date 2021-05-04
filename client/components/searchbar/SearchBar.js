@@ -42,7 +42,9 @@ export default function SearchBar({ buttonName, onUpdateHandler, cx }) {
 
   return (
     <div
-      className={`flex flex-col border-b w-full justify-center items-center ${cx?.wrapper}`}
+      className={`flex flex-col border-b w-full justify-center items-center ${
+        cx?.wrapper ? cx.wrapper : ''
+      }`}
     >
       {/* <div onClick={() => setIsOpen(!isOpen)} className="bg-purple-300 h-6">
         <span className="absolute top-0 right-0 p-2">
@@ -64,49 +66,55 @@ export default function SearchBar({ buttonName, onUpdateHandler, cx }) {
           </svg>
         </span>
       </div> */}
-      <form
-        className={`${
-          isOpen ? 'visible' : 'hidden'
-        } flex flex-col w-full h-1/2 space-y-2 justify-center items-center p-4 lg:flex-row lg:justify-around lg:space-y-0 lg:space-x-8 xl:w-5/6`}
-        onSubmit={onSubmitHandler}
+      <div
+        className={`w-full px-2 ${
+          cx?.formWrapper ? cx.formWrapper : 'lg:w-4/5'
+        }`}
       >
-        {pathname !== '/hotels/[hotelId]' && (
-          <DestinationComboBox
-            selectedItem={destination}
-            selectedItemChangeHandler={setDestination}
-          />
-        )}
-        <div className="flex py-2 w-full space-x-6">
-          <Input
-            labelName={'Check In'}
-            minValue={MIN_START_DATE}
-            name={'start-date'}
-            placeholder={'start-date'}
-            onChangeHandler={setStartDate}
-            showLabel={true}
-            type={'date'}
-            value={startDate}
-          />
-          <Input
-            labelName={'Check Out'}
-            minValue={startDate}
-            name={'end-date'}
-            placeholder={'end-date'}
-            onChangeHandler={setEndDate}
-            showLabel={true}
-            type={'date'}
-            value={endDate}
-          />
-        </div>
-        <div className="py-4 lg:py-0 lg:pt-6">
-          <button
-            type="submit"
-            className="flex items-stretch justify-center lg:self-end px-8 py-2 border-b border-gray-900 text-base text-white font-light bg-gray-900 hover:bg-gray-800"
-          >
-            {buttonName || 'Check Availability'}
-          </button>
-        </div>
-      </form>
+        <form
+          className={`${
+            isOpen ? 'visible' : 'hidden'
+          } flex flex-col w-full h-1/2 space-y-2 justify-center items-center p-4 lg:flex-row lg:justify-around lg:space-y-0 lg:space-x-8`}
+          onSubmit={onSubmitHandler}
+        >
+          {pathname !== '/hotels/[hotelId]' && (
+            <DestinationComboBox
+              selectedItem={destination}
+              selectedItemChangeHandler={setDestination}
+            />
+          )}
+          <div className="flex flex-col sm:flex-row py-2 w-full sm:space-x-6">
+            <Input
+              labelName={'Check In'}
+              minValue={MIN_START_DATE}
+              name={'start-date'}
+              placeholder={'start-date'}
+              onChangeHandler={setStartDate}
+              showLabel={true}
+              type={'date'}
+              value={startDate}
+            />
+            <Input
+              labelName={'Check Out'}
+              minValue={startDate}
+              name={'end-date'}
+              placeholder={'end-date'}
+              onChangeHandler={setEndDate}
+              showLabel={true}
+              type={'date'}
+              value={endDate}
+            />
+          </div>
+          <div className="py-4 lg:py-0 lg:pt-6">
+            <button
+              type="submit"
+              className="flex items-stretch justify-center lg:self-end px-8 py-2 border-b border-gray-900 text-base text-white font-light bg-gray-900 hover:bg-gray-800"
+            >
+              {buttonName || 'Check Availability'}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

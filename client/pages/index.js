@@ -70,10 +70,10 @@ export default function Home() {
               </div>
             </div>
             <div className="flex justify-center w-full xl:absolute xl:top-32">
-              <div className="bg-white bg-opacity-40 w-full xl:w-5/6 border-0">
+              <div className="bg-white bg-opacity-40 w-full xl:w-3/4 border-0">
                 <SearchBar
                   buttonName="Search"
-                  cx={{ wrapper: 'border-none' }}
+                  cx={{ wrapper: 'border-none', formWrapper: 'xl:w-full' }}
                   onUpdateHandler={onClickSearchHandler}
                 />
               </div>

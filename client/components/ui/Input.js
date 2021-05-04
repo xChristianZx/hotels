@@ -14,7 +14,7 @@ export const Input = ({
       <label
         className={`${
           showLabel ? 'capitalize' : 'sr-only'
-        } self-start text-gray-400 text-xs font-light pl-4`}
+        } self-start text-gray-900 text-xs font-light pl-4`}
         htmlFor={name}
       >
         {labelName}
