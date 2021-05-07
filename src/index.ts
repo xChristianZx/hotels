@@ -1,16 +1,15 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import { EntityManager, MikroORM, RequestContext } from '@mikro-orm/core';
+import { EntityRepository } from '@mikro-orm/mongodb';
 dotenv.config();
 
 import mikroConfig from './mikro-orm.config';
-import { EntityManager, MikroORM, RequestContext } from '@mikro-orm/core';
-import { indexRouter } from './routes/index';
-import { showRouter } from './routes/show';
-import { authRouter } from './routes/auth';
-
 import { User } from './entities';
-import { EntityRepository } from '@mikro-orm/mongodb';
+
+import { hotelsRouter } from './routes/hotels/index';
+import { authRouter } from './routes/auth/index';
 
 export const DI = {} as {
   orm: MikroORM;
@@ -33,9 +32,8 @@ const app = express();
     RequestContext.create(DI.orm.em, next);
   });
 
-  app.use(indexRouter);
-  app.use(showRouter);
-  app.use(authRouter);
+  app.use('/hotels', hotelsRouter);
+  app.use('/auth', authRouter);
 
   app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
