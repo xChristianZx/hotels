@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import axios from 'axios';
 import qs from 'qs';
-import { queryCheck } from '../utils/queryCheck';
+import { queryCheck } from '../../utils/queryCheck';
 
 const BASE_URL = 'https://sandbox.impala.travel/v1/hotels';
 
@@ -13,7 +13,7 @@ const router = express.Router();
  * bracket notation
  * Ex. starRating: {gte: 4} ==> starRating[gte]=4
  */
-router.get('/hotels', async (req: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response) => {
   try {
     const convertedQuery = await queryCheck(req.query);
 
@@ -37,4 +37,4 @@ router.get('/hotels', async (req: Request, res: Response) => {
   }
 });
 
-export { router as indexRouter };
+export { router as getAllRouter };
