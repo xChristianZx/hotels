@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { Password } from '../../utils/password';
 import { body, validationResult } from 'express-validator';
 import { validationFormatter } from '../../utils/validationFormatter';
+import jwt from 'jsonwebtoken';
 
 import { DI } from '../../index';
 import { User } from '../../entities';
@@ -43,7 +44,14 @@ router.post(
       const user = new User(firstName, lastName, email, hashedPassword);
       await DI.userRepository.persist(user).flush();
 
-      res.json(`New user added: ${firstName} ${lastName}`);
+      const userJwt = jwt.sign(
+        { id: user._id, email: user.email },
+        process.env.JWT_KEY!
+      );
+
+      req.session = { jwt: userJwt };
+
+      res.status(201).json(`New user ${user.fullName} added`);
     } catch (err) {
       return res.status(400).json({ message: err.message });
     }

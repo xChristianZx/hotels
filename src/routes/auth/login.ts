@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { Password } from '../../utils/password';
 import { body, validationResult } from 'express-validator';
 import { validationFormatter } from '../../utils/validationFormatter';
+import jwt from 'jsonwebtoken';
 
 import { DI } from '../../index';
 import { User } from '../../entities';
@@ -27,22 +28,26 @@ router.post(
     try {
       const { email, password } = req.body;
 
-      const results = await DI.em.findOne(User, { email });
-      if (!results) {
+      const user = await DI.em.findOne(User, { email });
+      if (!user) {
         throw new Error('User does not exist');
       }
 
-      const isValidPassword = await Password.compare(
-        results.password,
-        password
-      );
+      const isValidPassword = await Password.compare(user.password, password);
 
       if (!isValidPassword) {
-        throw new Error('Invalid email or password');
+        throw new Error('Invalid credentials');
       }
 
-      console.log('results', results);
-      res.json(`${results?.fullName} logged in`);
+      const userJwt = jwt.sign(
+        { id: user._id, email: user.email },
+        process.env.JWT_KEY!
+      );
+
+      req.session = { jwt: userJwt };
+
+      //   console.log('results', user);
+      res.status(200).json({ message: `${user?.fullName} logged in` });
     } catch (err) {
       return res.status(400).json({ message: err.message });
     }

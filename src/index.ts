@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import { EntityManager, MikroORM, RequestContext } from '@mikro-orm/core';
 import { EntityRepository } from '@mikro-orm/mongodb';
+import cookieSession from 'cookie-session';
 dotenv.config();
 
 import mikroConfig from './mikro-orm.config';
@@ -27,6 +28,13 @@ const app = express();
 
   app.use(cors());
   app.use(express.json());
+
+  app.use(
+    cookieSession({
+      signed: false,
+      secure: process.env.NODE_ENV === 'production',
+    })
+  );
 
   app.use((req, res, next) => {
     RequestContext.create(DI.orm.em, next);
