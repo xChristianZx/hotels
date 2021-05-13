@@ -8,7 +8,9 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   return (
     <>
-      {router.route !== '/' && <Header />}
+      {router.route !== '/' &&
+        router.route !== '/auth/signup' &&
+        router.route !== '/auth/login' && <Header />}
 
       <SearchQueryProvider>
         <Component {...pageProps} />
