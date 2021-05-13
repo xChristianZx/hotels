@@ -5,7 +5,7 @@ import { heroImages } from '../../utils/landingPageImages';
 export default function Login() {
   const currentHero = heroImages[2];
   return (
-    <div className="relative sm:px-4 pt-16 bg-gray-200 flex flex-col flex-grow justify-start items-center">
+    <div className="relative sm:px-4 bg-gray-200 flex flex-col flex-grow justify-center items-center">
       <img
         className="absolute inset-0 z-0 w-full h-full object-cover object-bottom filter hue-rotate-15"
         src={currentHero.url}
