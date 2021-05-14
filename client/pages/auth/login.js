@@ -15,6 +15,7 @@ export default function Login() {
         <img
           className="absolute inset-0 z-0 w-full h-full object-cover object-center filter hue-rotate-15"
           src={currentHero.url}
+          alt={currentHero.name}
         />
         <div className="bg-gray-50 sm:bg-transparent z-50">
           <Header
