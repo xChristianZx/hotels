@@ -20,8 +20,8 @@ export default function LoginForm() {
   const onSubmit = data => console.log('SUBMITTED', data);
 
   return (
-    <div className="w-full p-4 lg:w-1/3 sm:max-w-md bg-gray-50 bg-opacity-95 shadow-2xl z-50">
-      <div className="py-8 text-center">
+    <div className="p-4 sm:max-w-xs bg-gray-50 bg-opacity-95 shadow-2xl z-50">
+      <div className="py-8 text-center text-gray-900">
         <h1 className="text-3xl tracking-wide">Login</h1>
       </div>
       <form
