@@ -29,7 +29,7 @@ export default function SignUp() {
   const onSubmit = data => console.log('SUBMITTED', data);
 
   return (
-    <div className="w-full p-4 lg:w-1/3 sm:max-w-md bg-gray-100 rounded-sm bg-opacity-95 shadow-2xl z-50">
+    <div className="p-4 w-full max-w-xs sm:max-w-sm bg-gray-100 rounded-sm bg-opacity-95 shadow-2xl z-50">
       <div className="py-8 text-center">
         <h1 className="text-3xl tracking-wide">Sign Up</h1>
       </div>
