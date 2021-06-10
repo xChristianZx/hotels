@@ -26,11 +26,27 @@ const app = express();
   DI.em = DI.orm.em;
   DI.userRepository = DI.orm.em.getRepository(User);
 
-  app.use(cors());
+  const corsOptions = {
+    allowedHeaders: [
+      'Origin',
+      'X-Requested-With',
+      'Content-Type',
+      'Accept',
+      'X-Access-Token',
+      'Authorization',
+    ],
+    credentials: true,
+    methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
+    origin: 'http://localhost:3000',
+    preflightContinue: false,
+  };
+
+  app.use(cors(corsOptions));
   app.use(express.json());
 
   app.use(
     cookieSession({
+      name: '_sid',
       signed: false,
       secure: process.env.NODE_ENV === 'production',
     })
