@@ -1,6 +1,6 @@
 import { useEffect, useState, useReducer, useRef } from 'react';
 import axios from '../../config/config';
-import { FETCH_INIT, FETCH_SUCCESS, FETCH_FAILURE } from './types';
+import { FETCH_INIT, FETCH_SUCCESS, FETCH_FAILURE } from '../types';
 
 function fetchDataReducer(state, action) {
   switch (action.type) {
