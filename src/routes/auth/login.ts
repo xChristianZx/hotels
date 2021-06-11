@@ -36,7 +36,7 @@ router.post(
       const isValidPassword = await Password.compare(user.password, password);
 
       if (!isValidPassword) {
-        throw new Error('Invalid credentials');
+        throw new Error('Invalid email or password');
       }
 
       const userJwt = jwt.sign(
