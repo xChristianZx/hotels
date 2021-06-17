@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react';
+import { signIn, useSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import axios from '../../config/config';
-import useLogin from '../../utils/useAuth/useLogin';
 
 const loginSchema = yup.object().shape({
   email: yup
@@ -12,31 +14,51 @@ const loginSchema = yup.object().shape({
   password: yup.string().required('Password is required'),
 });
 
-export default function LoginForm() {  
+export default function LoginForm() {
+  const router = useRouter();
 
-  const { isLoading, isError, error, loginUser } = useLogin('/hotels');
+  const [session, loading] = useSession();
+  const [loginError, setLoginError] = useState();
+
+  console.log('SESSSION', session);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(loginSchema) });
-  
+
+  const newHandleLogin = ({ email, password }) => {
+    signIn('credentials', {
+      email,
+      password,
+      callbackUrl: `${window.location.origin}/hotels`,
+    });
+  };
+
+  useEffect(() => {
+    if (router.query.error) {
+      setLoginError(router.query.error);
+    } else {
+      setLoginError(null);
+    }
+  }, [router]);
+
   return (
     <div className="relative p-4 sm:max-w-xs bg-gray-50 bg-opacity-95 shadow-2xl z-50">
       <div className="absolute top-2 left-0 h-3 w-full">
-        {isError && (
+        {loginError && (
           <div className="py-2 text-center bg-red-100">
-            <p className="text-xs text-red-600">{error}</p>
+            <p className="text-xs text-red-600">{loginError}</p>
           </div>
         )}
       </div>
       <div className="py-8 text-center text-gray-900">
         <h1 className="text-3xl tracking-wide">Login</h1>
-      </div>  
+      </div>
       <form
         className="flex flex-col w-full p-4 space-y-4 font-normal"
-        onSubmit={handleSubmit(loginUser)}
+        onSubmit={handleSubmit(newHandleLogin)}
       >
         <label
           htmlFor="email"
