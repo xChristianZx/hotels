@@ -39,6 +39,13 @@ router.post(
         throw new Error('Invalid email or password');
       }
 
+      const userInfo = {
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        fullName: user.fullName,
+      };
+
       const userJwt = jwt.sign(
         { id: user._id, email: user.email },
         process.env.JWT_KEY!
@@ -47,7 +54,11 @@ router.post(
       req.session = { jwt: userJwt };
 
       //   console.log('results', user);
-      res.status(200).json({ message: `${user?.fullName} logged in` });
+      res.status(200).json({
+        message: `${user?.fullName} logged in`,
+        token: userJwt,
+        user: userInfo,
+      });
     } catch (err) {
       return res.status(400).json({ message: err.message });
     }
