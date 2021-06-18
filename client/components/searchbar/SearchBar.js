@@ -83,7 +83,7 @@ export default function SearchBar({ buttonName, onUpdateHandler, cx }) {
               selectedItemChangeHandler={setDestination}
             />
           )}
-          <div className="flex flex-col sm:flex-row py-2 w-full sm:space-x-6">
+          <div className="flex flex-col space-y-2 lg:space-y-0 sm:flex-row py-2 w-full sm:space-x-6">
             <Input
               labelName={'Check In'}
               minValue={MIN_START_DATE}
