@@ -6,7 +6,7 @@ const providers = [
   Providers.Credentials({
     name: 'credentials',
 
-    authorize: async (credentials, req) => {      
+    authorize: async (credentials, req) => {
       try {
         const res = await axios.post(
           '/auth/login',
@@ -20,13 +20,14 @@ const providers = [
           }
         );
 
-        if (res.status === 200) {          
+        if (res.status === 200) {
           return res.data;
         }
       } catch (e) {
+        // Redirecting to the login page with error message and persisting callback in the URL
         const errorMessage = e.response.data.message;
-        // Redirecting to the login page with error message in the URL
-        throw new Error(errorMessage);
+        console.log('NextAuth Login Error', e.response.data);
+        throw new Error(errorMessage + `&callbackUrl=${req.body.callbackUrl}`);
       }
     },
   }),
@@ -57,6 +58,8 @@ const callbacks = {
 
   async session(session, token) {
     session.accessToken = token.accessToken;
+    session.user.firstName = token.firstName;
+    session.user.lastName = token.lastName;
     return session;
   },
 };

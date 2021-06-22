@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Fragment } from 'react';
+import { useRouter } from 'next/router';
+import { Fragment, useEffect, useState } from 'react';
 import { useSession, signOut } from 'next-auth/client';
 import { Menu, Transition } from '@headlessui/react';
 import {
@@ -12,9 +13,31 @@ import classNames from '../../utils/classNames';
 
 export default function Header(props) {
   const { cx } = props;
+  const router = useRouter();
   const [session, loading] = useSession();
+  const [cbUrl, setCbUrl] = useState('');
+
+  console.log('HEADER cbUrl', cbUrl);
+
+  console.log('Router', router);
+
+  useEffect(() => {
+    if (router.pathname !== '/auth/login') {
+      setCbUrl(window.location.href);
+    }
+    if (router.pathname === '/auth/login' && router.query.callbackUrl) {
+      setCbUrl(router.query.callbackUrl);
+    }
+  }, [router.query]);
 
   const renderNavLinks = () => {
+    // TODO - Prevent cbUrl from placing multiple on there if clicked again
+    // check if on /auth/login and if cbUrl already exists
+    const authLoginUrl =
+      typeof window !== 'undefined' && router.pathname !== '/auth/login'
+        ? `/auth/login?callbackUrl=${window.location.href}`
+        : `/auth/login?callbackUrl=${cbUrl}`;
+
     return session ? (
       <>
         <Menu as="li" className="relative inline-block text-left">
@@ -69,7 +92,7 @@ export default function Header(props) {
       </>
     ) : (
       <li className="flex flex-col justify-center items-center">
-        <Link href="/auth/login">
+        <Link href={authLoginUrl}>
           <a className="flex flex-col justify-center items-center">
             <UserSVG />
             <span className="pt-1">Login</span>

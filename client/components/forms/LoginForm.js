@@ -19,7 +19,16 @@ export default function LoginForm() {
 
   const [session, loading] = useSession();
   const [loginError, setLoginError] = useState();
+  const [cbUrl, setCbUrl] = useState();
 
+  useEffect(() => {
+    if (router.query.callbackUrl) {
+      setCbUrl(router.query.callbackUrl);
+    }
+  }, []);
+
+  console.log('cbUrl', cbUrl);
+  console.log('Login Error', loginError);
   console.log('SESSSION', session);
 
   const {
@@ -32,7 +41,7 @@ export default function LoginForm() {
     signIn('credentials', {
       email,
       password,
-      callbackUrl: `${window.location.origin}/hotels`,
+      callbackUrl: cbUrl,
     });
   };
 
@@ -42,7 +51,7 @@ export default function LoginForm() {
     } else {
       setLoginError(null);
     }
-  }, [router]);
+  }, [router.query]);
 
   return (
     <div className="relative p-4 sm:max-w-xs bg-gray-50 bg-opacity-95 shadow-2xl z-50">
