@@ -7,5 +7,5 @@ export function validationFormatter({
   value,
   nestedErrors,
 }: ValidationError) {
-  return `${location}[${param}]: ${msg}`;
+  return msg;
 }
