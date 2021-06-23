@@ -17,27 +17,16 @@ export default function Header(props) {
   const [session, loading] = useSession();
   const [cbUrl, setCbUrl] = useState('');
 
-  console.log('HEADER cbUrl', cbUrl);
-
-  console.log('Router', router);
-
   useEffect(() => {
     if (router.pathname !== '/auth/login') {
-      setCbUrl(window.location.href);
+      setCbUrl(router.asPath);
     }
     if (router.pathname === '/auth/login' && router.query.callbackUrl) {
       setCbUrl(router.query.callbackUrl);
     }
-  }, [router.query]);
+  }, [router]);
 
   const renderNavLinks = () => {
-    // TODO - Prevent cbUrl from placing multiple on there if clicked again
-    // check if on /auth/login and if cbUrl already exists
-    const authLoginUrl =
-      typeof window !== 'undefined' && router.pathname !== '/auth/login'
-        ? `/auth/login?callbackUrl=${window.location.href}`
-        : `/auth/login?callbackUrl=${cbUrl}`;
-
     return session ? (
       <>
         <Menu as="li" className="relative inline-block text-left">
@@ -92,7 +81,7 @@ export default function Header(props) {
       </>
     ) : (
       <li className="flex flex-col justify-center items-center">
-        <Link href={authLoginUrl}>
+        <Link href={`/auth/login?callbackUrl=${cbUrl}`}>
           <a className="flex flex-col justify-center items-center">
             <UserSVG />
             <span className="pt-1">Login</span>

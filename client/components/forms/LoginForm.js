@@ -25,11 +25,7 @@ export default function LoginForm() {
     if (router.query.callbackUrl) {
       setCbUrl(router.query.callbackUrl);
     }
-  }, []);
-
-  console.log('cbUrl', cbUrl);
-  console.log('Login Error', loginError);
-  console.log('SESSSION', session);
+  }, [router.query]);
 
   const {
     register,
@@ -37,7 +33,7 @@ export default function LoginForm() {
     formState: { errors },
   } = useForm({ resolver: yupResolver(loginSchema) });
 
-  const newHandleLogin = ({ email, password }) => {
+  const handleLogin = ({ email, password }) => {
     signIn('credentials', {
       email,
       password,
@@ -67,7 +63,7 @@ export default function LoginForm() {
       </div>
       <form
         className="flex flex-col w-full p-4 space-y-4 font-normal"
-        onSubmit={handleSubmit(newHandleLogin)}
+        onSubmit={handleSubmit(handleLogin)}
       >
         <label
           htmlFor="email"

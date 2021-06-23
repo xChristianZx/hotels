@@ -41,9 +41,11 @@ const callbacks = {
   },
 
   async redirect(url, baseUrl) {
-    return url.startsWith(baseUrl)
-      ? Promise.resolve(url)
-      : Promise.resolve(baseUrl);
+    return Promise.resolve(url);
+    // Saving should there be issues in prod
+    // return url.startsWith(baseUrl)
+    //   ? Promise.resolve(url)
+    //   : Promise.resolve(baseUrl);
   },
 
   // Getting the JWT token from API response
