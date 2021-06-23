@@ -15,17 +15,18 @@ router.post(
     body('email').isEmail().withMessage('A valid email address is required'),
     body('password')
       .trim()
-      .isLength({ min: 6, max: 20 })
+      .isLength({ min: 6 })
       .withMessage('Password is required'),
   ],
   async (req: Request, res: Response) => {
-    const errors = validationResult(req).formatWith(validationFormatter);
-
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ message: errors.array() });
-    }
-
     try {
+      const errors = validationResult(req).formatWith(validationFormatter);
+
+      if (!errors.isEmpty()) {
+        console.error('Credentials validation error', errors.mapped());
+        throw new Error('Invalid email or password');
+      }
+
       const { email, password } = req.body;
 
       const user = await DI.em.findOne(User, { email });
@@ -47,7 +48,13 @@ router.post(
       };
 
       const userJwt = jwt.sign(
-        { id: user._id, email: user.email },
+        {
+          id: user._id,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          fullName: user.fullName,
+        },
         process.env.JWT_KEY!
       );
 
