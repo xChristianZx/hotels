@@ -1,4 +1,7 @@
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
@@ -25,6 +28,15 @@ export default function SignUp() {
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(signUpSchema) });
+
+  const router = useRouter();
+  const [cbUrl, setCbUrl] = useState('');
+
+  useEffect(() => {
+    if (router.query.callbackUrl) {
+      setCbUrl(router.query.callbackUrl);
+    }
+  }, [router.query]);
 
   const onSubmit = data => console.log('SUBMITTED', data);
 
@@ -142,6 +154,14 @@ export default function SignUp() {
           />
         </div>
       </form>
+      <div className="w-full text-sm text-center pt-4">
+        <p className="text-gray-400 font-light">Already have an account?</p>
+        <Link href={`/auth/login?callbackUrl=${cbUrl}`}>
+          <span className="text-gray-600 underline cursor-pointer hover:text-gray-900">
+            Log in now
+          </span>
+        </Link>
+      </div>
     </div>
   );
 }

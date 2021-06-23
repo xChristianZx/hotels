@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { signIn, useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -106,6 +107,14 @@ export default function LoginForm() {
           />
         </div>
       </form>
+      <div className="w-full text-sm text-center pt-4">
+        <p className="text-gray-400 font-light">Don't have an account?</p>
+        <Link href={`/auth/signup?callbackUrl=${cbUrl}`}>
+          <span className="text-gray-600 underline cursor-pointer hover:text-gray-900">
+            Sign up now
+          </span>
+        </Link>
+      </div>
     </div>
   );
 }

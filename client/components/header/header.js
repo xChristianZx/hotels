@@ -18,10 +18,16 @@ export default function Header(props) {
   const [cbUrl, setCbUrl] = useState('');
 
   useEffect(() => {
-    if (router.pathname !== '/auth/login') {
+    if (
+      router.pathname !== '/auth/login' ||
+      router.pathname !== 'auth/signup'
+    ) {
       setCbUrl(router.asPath);
     }
-    if (router.pathname === '/auth/login' && router.query.callbackUrl) {
+    if (
+      (router.pathname === '/auth/login' && router.query.callbackUrl) ||
+      (router.pathname === 'auth/signup' && router.query.callbackUrl)
+    ) {
       setCbUrl(router.query.callbackUrl);
     }
   }, [router]);
