@@ -10,7 +10,7 @@ import { User } from '../../entities';
 const router = express.Router();
 
 router.post(
-  '/register',
+  '/signup',
   [
     body('firstName').trim().notEmpty(),
     body('lastName').trim().notEmpty(),
@@ -31,7 +31,7 @@ router.post(
 
       if (!errors.isEmpty()) {
         console.error(
-          'Registration credentials validation error',
+          'Sign up credentials validation error',
           errors.mapped()
         );
         throw new Error(errors.mapped().toString());
@@ -79,4 +79,4 @@ router.post(
   }
 );
 
-export { router as registerRouter };
+export { router as signUpRouter };

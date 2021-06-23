@@ -3,7 +3,7 @@ import { FETCH_INIT, FETCH_FAILURE, FETCH_SUCCESS } from '../types';
 import axios from '../../config/config';
 import { useRouter } from 'next/router';
 
-function fetchLoginReducer(state, action) {
+function fetchSignUpReducer(state, action) {
   switch (action.type) {
     case FETCH_INIT:
       return { ...state, isLoading: true, isError: false, error: null };
@@ -24,27 +24,28 @@ function fetchLoginReducer(state, action) {
   }
 }
 
-export default function useLogin(onSuccessRedirect) {
-  const [state, dispatch] = useReducer(fetchLoginReducer, {
+export default function useSignUp(onSuccessRedirect) {
+  const [state, dispatch] = useReducer(fetchSignUpReducer, {
     isLoading: false,
     isError: false,
     error: null,
   });
-  
+
   const { isLoading, isError, error } = state;
 
   const router = useRouter();
 
-  const loginUser = async userData => {
+  const signUpUser = async userData => {
     try {
       dispatch({ type: FETCH_INIT });
-      const res = await axios.post('/auth/login', userData, {
+      const res = await axios.post('/auth/signup', userData, {
         withCredentials: true,
       });
 
       if (res.status === 200) {
         dispatch({ type: FETCH_SUCCESS });
-        router.push(onSuccessRedirect);
+        console.log(res);
+        // router.push(onSuccessRedirect);
       }
     } catch (error) {
       const { message } = error.response.data;
@@ -54,5 +55,5 @@ export default function useLogin(onSuccessRedirect) {
     }
   };
 
-  return { isLoading, isError, error, loginUser };
+  return { isLoading, isError, error, signUpUser };
 }
