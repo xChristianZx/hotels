@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { signIn, useSession } from 'next-auth/client';
+import { signIn } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
@@ -18,29 +18,27 @@ const loginSchema = yup.object().shape({
 export default function LoginForm() {
   const router = useRouter();
 
-  const [session, loading] = useSession();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(loginSchema) });
   const [loginError, setLoginError] = useState();
   const [cbUrl, setCbUrl] = useState();
+
+  const handleLogin = ({ email, password }) => {
+    signIn('credentials-login', {
+      email,
+      password,
+      callbackUrl: cbUrl,
+    });
+  };
 
   useEffect(() => {
     if (router.query.callbackUrl) {
       setCbUrl(router.query.callbackUrl);
     }
   }, [router.query]);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ resolver: yupResolver(loginSchema) });
-
-  const handleLogin = ({ email, password }) => {
-    signIn('credentials', {
-      email,
-      password,
-      callbackUrl: cbUrl,
-    });
-  };
 
   useEffect(() => {
     if (router.query.error) {

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { signIn, useSession } from 'next-auth/client';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
@@ -31,6 +32,7 @@ export default function SignUp() {
 
   const router = useRouter();
   const [cbUrl, setCbUrl] = useState('');
+  const [signUpError, setSignUpError] = useState();
 
   useEffect(() => {
     if (router.query.callbackUrl) {
@@ -38,16 +40,36 @@ export default function SignUp() {
     }
   }, [router.query]);
 
-  const onSubmit = data => console.log('SUBMITTED', data);
+  useEffect(() => {
+    if (router.query.error) {
+      setSignUpError(router.query.error);
+    } else {
+      setSignUpError(null);
+    }
+  }, [router.query]);
+
+  const handleSignUp = data => {
+    signIn('credentials-signup', {
+      ...data,
+      callbackUrl: cbUrl,
+    });
+  };
 
   return (
-    <div className="p-4 w-full max-w-xs sm:max-w-sm bg-gray-100 rounded-sm bg-opacity-95 shadow-2xl z-50">
+    <div className="relative p-4 w-full max-w-xs sm:max-w-sm bg-gray-100 rounded-sm bg-opacity-95 shadow-2xl z-50">
+      <div className="absolute top-2 left-0 h-3 w-full">
+        {signUpError && (
+          <div className="py-2 text-center bg-red-100">
+            <p className="text-xs text-red-600">{signUpError}</p>
+          </div>
+        )}
+      </div>
       <div className="py-8 text-center">
         <h1 className="text-3xl tracking-wide">Sign Up</h1>
       </div>
       <form
         className="flex flex-col w-full p-4 space-y-4 font-normal"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(handleSignUp)}
       >
         <label
           htmlFor="firstName"

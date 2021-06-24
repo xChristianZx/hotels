@@ -12,8 +12,16 @@ const router = express.Router();
 router.post(
   '/signup',
   [
-    body('firstName').trim().notEmpty(),
-    body('lastName').trim().notEmpty(),
+    body('firstName')
+      .trim()
+      .isString()
+      .notEmpty()
+      .withMessage('First name is required'),
+    body('lastName')
+      .trim()
+      .isString()
+      .notEmpty()
+      .withMessage('Last name is required'),
     body('email')
       .isEmail()
       .normalizeEmail()
@@ -22,19 +30,25 @@ router.post(
       .trim()
       .isLength({ min: 6, max: 128 })
       .withMessage('Password must be between 6 and 128 characters'),
+    body('confirmPassword')
+      .trim()
+      .notEmpty()
+      .withMessage('Confirm password is required'),
   ],
   async (req: Request, res: Response) => {
     try {
-      const { firstName, lastName, email, password } = req.body;
+      const { firstName, lastName, email, password, confirmPassword } =
+        req.body;
 
       const errors = validationResult(req).formatWith(validationFormatter);
 
       if (!errors.isEmpty()) {
-        console.error(
-          'Sign up credentials validation error',
-          errors.mapped()
-        );
-        throw new Error(errors.mapped().toString());
+        console.error('Sign up credentials validation error', errors.mapped());
+        throw new Error(errors.array().toString());
+      }
+
+      if (password !== confirmPassword) {
+        throw new Error('Passwords do not match');
       }
 
       const existingUser = await DI.userRepository.findOne({ email });

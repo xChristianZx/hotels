@@ -2,32 +2,50 @@ import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
 import axios from '../../../config/config';
 
+const axiosInstance = axios.create({
+  withCredentials: true,
+  headers: { accept: '*/*', 'Content-Type': 'application/json' },
+});
+
 const providers = [
   Providers.Credentials({
-    name: 'credentials',
+    id: 'credentials-signup',
+    name: 'Sign Up',
+    authorize: async (credentials, req) => {
+      try {
+        const { data, status } = await axiosInstance.post('/auth/signup', {
+          ...credentials,
+        });
+        if (status === 201 && data.user) {
+          return data;
+        }
+      } catch (e) {
+        const errorMessage = e.response.data.message;
+        console.log('NextAuth SignUp Error', e.response.data);
+        // https://next-auth.js.org/providers/credentials#example
+        throw `/auth/signup?error=${errorMessage}&callbackUrl=${req.body.callbackUrl}`;
+      }
+    },
+  }),
+  Providers.Credentials({
+    id: 'credentials-login',
+    name: 'Login',
 
     authorize: async (credentials, req) => {
       try {
-        const res = await axios.post(
-          '/auth/login',
-          { email: credentials.email, password: credentials.password },
-          {
-            withCredentials: true,
-            headers: {
-              accept: '*/*',
-              'Content-Type': 'application/json',
-            },
-          }
-        );
+        const { data, status } = await axiosInstance.post('/auth/login', {
+          email: credentials.email,
+          password: credentials.password,
+        });
 
-        if (res.status === 200) {
-          return res.data;
+        if (status === 200 && data.user) {
+          return data;
         }
       } catch (e) {
         // Redirecting to the login page with error message and persisting callback in the URL
         const errorMessage = e.response.data.message;
         console.log('NextAuth Login Error', e.response.data);
-        throw new Error(errorMessage + `&callbackUrl=${req.body.callbackUrl}`);
+        throw `/auth/login?error=${errorMessage}&callbackUrl=${req.body.callbackUrl}`;
       }
     },
   }),
@@ -71,7 +89,6 @@ const options = {
   callbacks,
   pages: {
     signIn: '/auth/login',
-    error: '/auth/login',
   },
   debug: true,
 };
