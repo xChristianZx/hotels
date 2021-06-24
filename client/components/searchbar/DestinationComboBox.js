@@ -41,7 +41,7 @@ export default function DestinationComboBox({
   return (
     <div className="relative lg:static w-full">
       <label
-        className="capitalize self-start text-gray-900 text-xs font-light pl-4"
+        className="capitalize self-start text-gray-900 text-base font-light pl-4"
         {...getLabelProps()}
       >
         Destination
@@ -56,7 +56,7 @@ export default function DestinationComboBox({
           {...getInputProps()}
         />
         <button
-          className={`px-2 text-gray-300 hover:text-gray-900 ${
+          className={`px-2 text-gray-900 hover:text-gray-300 ${
             isOpen && 'transform rotate-180'
           }`}
           type="button"
@@ -69,7 +69,7 @@ export default function DestinationComboBox({
       <ul
         className={`${
           isOpen ? 'visible' : 'invisible'
-        } visible absolute mt-2 p-2 border z-50 w-full lg:min-w-max lg:max-w-md max-h-52 lg:max-h-96 bg-white overflow-y-scroll`}
+        } absolute mt-2 p-2 border z-50 w-full lg:min-w-max lg:max-w-md max-h-52 lg:max-h-96 bg-white overflow-y-scroll`}
         {...getMenuProps()}
       >
         {isOpen &&
