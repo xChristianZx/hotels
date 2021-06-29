@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { Password } from '../../utils/password';
 import { body, validationResult } from 'express-validator';
 import { validationFormatter } from '../../utils/validationFormatter';
-import jwt from 'jsonwebtoken';
+import { JWT } from '../../utils/jwt';
 
 import { DI } from '../../index';
 import { User } from '../../entities';
@@ -47,16 +47,13 @@ router.post(
         fullName: user.fullName,
       };
 
-      const userJwt = jwt.sign(
-        {
-          id: user._id,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          fullName: user.fullName,
-        },
-        process.env.JWT_KEY!
-      );
+      const userJwt = await JWT.sign({
+        id: user._id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        fullName: user.fullName,
+      });
 
       req.session = { jwt: userJwt };
 
