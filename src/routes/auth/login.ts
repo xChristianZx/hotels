@@ -50,14 +50,11 @@ router.post(
       const userJwt = await JWT.sign({
         id: user._id,
         email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        fullName: user.fullName,
       });
 
       req.session = { jwt: userJwt };
 
-      //   console.log('results', user);
+      // console.log('JWT', userJwt);
       res.status(200).json({
         message: `${user?.fullName} logged in`,
         token: userJwt,
