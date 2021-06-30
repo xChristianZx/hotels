@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useSession, getSession } from 'next-auth/client';
 import Header from '../components/header/header';
 import SearchBar from '../components/searchbar/SearchBar';
 import { heroImages } from '../utils/landingPageImages';
@@ -83,4 +84,10 @@ export default function Home() {
       </div>
     </>
   );
+}
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  return {
+    props: { session },
+  };
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from '../../config/config';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { getSession } from 'next-auth/client';
 import { trimHotelName } from '../../utils/helper';
 import SearchBar from '../../components/searchbar/SearchBar';
 import RoomTypeItem from '../../components/hotels/RoomTypeItem';
@@ -102,7 +103,7 @@ export default function ShowHotel(props) {
 export async function getServerSideProps(ctx) {
   const { query } = ctx;
   const { start, end } = query;
-
+  const session = await getSession(ctx);
   const res = await axios.get(`/hotels/${query.hotelId}`, {
     params: start && end ? { start, end } : {},
   });
@@ -111,6 +112,7 @@ export async function getServerSideProps(ctx) {
   return {
     props: {
       initHotelData: data,
+      session,
     },
   };
 }

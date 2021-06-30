@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { getSession } from 'next-auth/client';
 import axios from '../../config/config';
 import HotelItem from '../../components/hotels/HotelItem';
 import SearchBar from '../../components/searchbar/SearchBar';
@@ -106,7 +107,7 @@ export default function Hotels(props) {
 
 export async function getServerSideProps(ctx) {
   const { query } = ctx;
-
+  const session = await getSession(ctx);
   const res = await axios.get('/hotels', { params: query });
   // console.log('SSR AXIOS RES', res);
 
@@ -115,6 +116,7 @@ export async function getServerSideProps(ctx) {
   return {
     props: {
       initialHotels: data,
+      session,
     },
   };
 }
