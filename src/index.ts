@@ -55,13 +55,12 @@ const app = express();
   app.use((req, res, next) => {
     RequestContext.create(DI.orm.em, next);
   });
-  
+
+  app.use('/hotels', hotelsRouter);
+  app.use('/auth', authRouter);
   app.use('/', (req, res) => {
     res.send('Hello There');
   });
-  
-  app.use('/hotels', hotelsRouter);
-  app.use('/auth', authRouter);
 
   app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
