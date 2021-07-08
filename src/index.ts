@@ -21,6 +21,8 @@ export const DI = {} as {
 const PORT = process.env.PORT || 4000;
 const app = express();
 
+console.log('NODE_ENV', process.env.NODE_ENV);
+
 (async () => {
   DI.orm = await MikroORM.init(mikroConfig);
   DI.em = DI.orm.em;
@@ -37,7 +39,9 @@ const app = express();
     ],
     credentials: true,
     methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-    origin: 'http://localhost:3000',
+    origin: (process.env.NODE_ENV === 'production'
+      ? process.env.CLIENT_PROD_DOMAIN
+      : 'http://localhost:3000'),
     preflightContinue: false,
   };
 
