@@ -46,7 +46,9 @@ const app = express();
   app.use(cors(corsOptions));
   app.use(express.json());
   app.use(helmet());
-  app.use(morgan('dev'));
+  if (process.env.NODE_ENV !== 'production') {
+    app.use(morgan('dev'));
+  }
 
   app.use(
     cookieSession({
