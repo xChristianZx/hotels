@@ -1,7 +1,8 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import axios from 'axios';
 import qs from 'qs';
 import { queryCheck } from '../../utils/queryCheck';
+import { BadRequestError } from '../../utils/errorHandlers';
 
 const BASE_URL = 'https://sandbox.impala.travel/v1/hotels';
 
@@ -13,7 +14,7 @@ const router = express.Router();
  * bracket notation
  * Ex. starRating: {gte: 4} ==> starRating[gte]=4
  */
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const convertedQuery = await queryCheck(req.query);
 
@@ -33,7 +34,7 @@ router.get('/', async (req: Request, res: Response) => {
     res.json(response.data);
   } catch (error) {
     console.error(error);
-    return res.status(400).json({ error: error.message });
+    next(new BadRequestError(error.message));
   }
 });
 

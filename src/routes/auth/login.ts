@@ -1,8 +1,9 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { Password } from '../../utils/password';
 import { body, validationResult } from 'express-validator';
 import { validationFormatter } from '../../utils/validationFormatter';
 import { JWT } from '../../utils/jwt';
+import { BadRequestError } from '../../utils/errorHandlers';
 
 import { DI } from '../../index';
 import { User } from '../../entities';
@@ -18,26 +19,26 @@ router.post(
       .isLength({ min: 6 })
       .withMessage('Password is required'),
   ],
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       const errors = validationResult(req).formatWith(validationFormatter);
 
       if (!errors.isEmpty()) {
         console.error('Credentials validation error', errors.mapped());
-        throw new Error('Invalid email or password');
+        throw new BadRequestError('Invalid email or password');
       }
 
       const { email, password } = req.body;
 
       const user = await DI.em.findOne(User, { email });
       if (!user) {
-        throw new Error('User does not exist');
+        throw new BadRequestError('User does not exist');
       }
 
       const isValidPassword = await Password.compare(user.password, password);
 
       if (!isValidPassword) {
-        throw new Error('Invalid email or password');
+        throw new BadRequestError('Invalid email or password');
       }
 
       const userInfo = {
@@ -61,7 +62,7 @@ router.post(
         user: userInfo,
       });
     } catch (err) {
-      return res.status(400).json({ message: err.message });
+      next(err);
     }
   }
 );

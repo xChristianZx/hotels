@@ -1,8 +1,11 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { Password } from '../../utils/password';
 import { body, validationResult } from 'express-validator';
-import { validationFormatter } from '../../utils/validationFormatter';
 import { JWT } from '../../utils/jwt';
+import {
+  BadRequestError,
+  RequestValidationError,
+} from '../../utils/errorHandlers';
 
 import { DI } from '../../index';
 import { User } from '../../entities';
@@ -35,26 +38,26 @@ router.post(
       .notEmpty()
       .withMessage('Confirm password is required'),
   ],
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { firstName, lastName, email, password, confirmPassword } =
         req.body;
 
-      const errors = validationResult(req).formatWith(validationFormatter);
+      const errors = validationResult(req);
 
       if (!errors.isEmpty()) {
         console.error('Sign up credentials validation error', errors.mapped());
-        throw new Error(errors.array().toString());
+        throw new RequestValidationError(errors.array());
       }
 
       if (password !== confirmPassword) {
-        throw new Error('Passwords do not match');
+        throw new BadRequestError('Passwords do not match');
       }
 
       const existingUser = await DI.userRepository.findOne({ email });
 
       if (existingUser) {
-        throw new Error('User already exists');
+        throw new BadRequestError('User already exists');
       }
 
       const hashedPassword = await Password.toHash(password);
@@ -82,7 +85,7 @@ router.post(
         user: userInfo,
       });
     } catch (err) {
-      return res.status(400).json({ message: err.message });
+      next(err);
     }
   }
 );

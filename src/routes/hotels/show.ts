@@ -1,12 +1,13 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import axios from 'axios';
+import { BadRequestError } from '../../utils/errorHandlers';
 
 const router = express.Router();
 
 /**
  * Get a single hotel info
  * */
-router.get('/:id', async (req: Request, res: Response) => {
+router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const { query } = req;
 
@@ -19,7 +20,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     res.json(response.data);
   } catch (error) {
     // console.error(error);
-    return res.status(400).json({ message: error.message });
+    next(new BadRequestError(error.message));
   }
 });
 
