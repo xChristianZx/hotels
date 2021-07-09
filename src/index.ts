@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import morgan from 'morgan';
+import helmet from 'helmet';
 import { EntityManager, MikroORM, RequestContext } from '@mikro-orm/core';
 import { EntityRepository } from '@mikro-orm/mongodb';
 import cookieSession from 'cookie-session';
@@ -11,6 +13,9 @@ import { User } from './entities';
 
 import { hotelsRouter } from './routes/hotels/index';
 import { authRouter } from './routes/auth/index';
+
+import { errorHandler } from './middleware/errorHandler';
+import { NotFoundError } from './utils/errorHandlers';
 
 export const DI = {} as {
   orm: MikroORM;
@@ -43,6 +48,10 @@ const app = express();
 
   app.use(cors(corsOptions));
   app.use(express.json());
+  app.use(helmet());
+  if (process.env.NODE_ENV !== 'production') {
+    app.use(morgan('dev'));
+  }
 
   app.use(
     cookieSession({
@@ -58,6 +67,11 @@ const app = express();
 
   app.use('/hotels', hotelsRouter);
   app.use('/auth', authRouter);
+
+  app.use('*', (req, res) => {
+    throw new NotFoundError();
+  });
+  app.use(errorHandler);
 
   app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
