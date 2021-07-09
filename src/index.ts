@@ -1,6 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import morgan from 'morgan';
+import helmet from 'helmet';
 import { EntityManager, MikroORM, RequestContext } from '@mikro-orm/core';
 import { EntityRepository } from '@mikro-orm/mongodb';
 import cookieSession from 'cookie-session';
@@ -43,6 +45,8 @@ const app = express();
 
   app.use(cors(corsOptions));
   app.use(express.json());
+  app.use(helmet());
+  app.use(morgan('dev'));
 
   app.use(
     cookieSession({
