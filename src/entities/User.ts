@@ -1,5 +1,5 @@
-import { Entity, Property } from '@mikro-orm/core';
-import { BaseEntity } from './BaseEntity';
+import { Collection, Entity, OneToMany, Property } from '@mikro-orm/core';
+import { BaseEntity, Booking } from './index';
 
 @Entity()
 export class User extends BaseEntity {
@@ -19,6 +19,9 @@ export class User extends BaseEntity {
 
   @Property()
   password!: string;
+
+  @OneToMany(() => Booking, b => b.guestName)
+  bookings = new Collection<Booking>(this);
 
   constructor(
     firstName: string,

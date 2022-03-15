@@ -10,9 +10,12 @@ export class Booking extends BaseEntity {
   status: BookingStatus;
 
   @Property()
+  hotelId!: string;
+
+  @Property()
   hotelName!: string;
 
-  @ManyToOne()
+  @ManyToOne(() => User)
   guestName!: User;
 
   @Property()
@@ -21,25 +24,22 @@ export class Booking extends BaseEntity {
   @Property()
   end!: string;
 
-  @Property()
-  rateTotal: number;
-
   constructor(
     bookingId: string,
     status: BookingStatus,
+    hotelId: string,
     hotelName: string,
     start: string,
     end: string,
-    rateTotal: number,
     guestName: User
   ) {
     super();
     this.bookingId = bookingId;
     this.status = status;
+    this.hotelId = hotelId;
     this.hotelName = hotelName;
     this.start = start;
     this.end = end;
-    this.rateTotal = rateTotal;
     this.guestName = guestName;
   }
 }
