@@ -11,7 +11,7 @@ const BASE_URL = 'https://sandbox.impala.travel/v1/bookings';
 
 // Pass bookingId that matches Booking.bookingId
 router.delete(
-  '/cancel/:bookingId',
+  '/:bookingId/cancel',
   requireLogin,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
