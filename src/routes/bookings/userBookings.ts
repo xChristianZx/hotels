@@ -19,11 +19,10 @@ router.get(
         populate: ['bookings'],
       });
 
-      if (!user) {
-        throw new Error('Could not find user. Please log in');
-      }
-
-      res.json(user);
+      res.json({
+        message: `Bookings for ${user.fullName}`,
+        data: user.bookings,
+      });
     } catch (error) {
       // console.error(error);
       next(new BadRequestError(error.message));
