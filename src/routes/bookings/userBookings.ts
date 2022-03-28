@@ -30,4 +30,4 @@ router.get(
   }
 );
 
-export { router as userBookings };
+export { router as userBookingsRouter };
