@@ -88,8 +88,8 @@ const { currentUser, body } = req;
         guestName: currentUser!.id,
       });
 
-      // TODO - Set shape of updatedAt
-      //  Fetch updatedAt
+      //  Fetch updatedAt property required by Impala API
+      //  to avoid race conditions
       const updatedAtFetch = await axios.get(
         `${BASE_URL}/${booking.bookingId}`,
         {
@@ -97,17 +97,23 @@ const { currentUser, body } = req;
         }
       );
 
+      // Add updatedAtFetch to put request body
+      const reqBody = {
+        ...body,
+        updateBookingVersionAtTimestamp: updatedAtFetch,
+      };
+
       // Send update request to Impala API
       const response = await axios.put(
         `${BASE_URL}/${booking.bookingId}`,
-        body,
+        reqBody,
         {
           headers: { 'x-api-key': process.env.HOTEL_SANDBOX_KEY },
         }
       );
       if (response.status === 200) {
-        //   Update local db
-        DI.bookingRepository.assign(booking, body);
+        //  Update local db
+        DI.bookingRepository.assign(booking, reqBody);
         await DI.bookingRepository.flush();
       }
 
