@@ -9,10 +9,11 @@ import cookieSession from 'cookie-session';
 dotenv.config();
 
 import mikroConfig from './mikro-orm.config';
-import { User } from './entities';
+import { User, Booking } from './entities';
 
 import { hotelsRouter } from './routes/hotels/index';
 import { authRouter } from './routes/auth/index';
+import { bookingsRouter } from './routes/bookings/index';
 
 import { errorHandler } from './middleware/errorHandler';
 import { NotFoundError } from './utils/errorHandlers';
@@ -21,6 +22,7 @@ export const DI = {} as {
   orm: MikroORM;
   em: EntityManager;
   userRepository: EntityRepository<User>;
+  bookingRepository: EntityRepository<Booking>;
 };
 
 const PORT = process.env.PORT || 4000;
@@ -29,7 +31,11 @@ const app = express();
 (async () => {
   DI.orm = await MikroORM.init(mikroConfig);
   DI.em = DI.orm.em;
+  // TODO Fix these TS errors
+  // @ts-ignore
   DI.userRepository = DI.orm.em.getRepository(User);
+  // @ts-ignore
+  DI.bookingRepository = DI.orm.em.getRepository(Booking);
 
   const corsOptions = {
     allowedHeaders: [
@@ -67,6 +73,7 @@ const app = express();
 
   app.use('/hotels', hotelsRouter);
   app.use('/auth', authRouter);
+  app.use('/bookings', bookingsRouter);
 
   app.use('*', (req, res) => {
     throw new NotFoundError();
