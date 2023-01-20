@@ -85,7 +85,7 @@ router.post(
         {
           id: currentUser!.id,
         },
-        ['bookings']
+        { populate: ['bookings'] }
       );
 
       if (!user) {
