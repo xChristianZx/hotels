@@ -31,10 +31,8 @@ const app = express();
 (async () => {
   DI.orm = await MikroORM.init(mikroConfig);
   DI.em = DI.orm.em;
-  // TODO Fix these TS errors
-  // @ts-ignore
+
   DI.userRepository = DI.orm.em.getRepository(User);
-  // @ts-ignore
   DI.bookingRepository = DI.orm.em.getRepository(Booking);
 
   const corsOptions = {
