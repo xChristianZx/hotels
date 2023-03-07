@@ -26,8 +26,10 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
         size: 10,
         sortBy: 'rating:desc',
       },
-      paramsSerializer: params => {
-        return qs.stringify(params, { encode: false });
+      paramsSerializer: {
+        serialize: params => {
+          return qs.stringify(params, { encode: false });
+        },
       },
     });
     // console.log('response', response);
