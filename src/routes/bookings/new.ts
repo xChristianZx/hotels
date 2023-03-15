@@ -40,20 +40,23 @@ const newBookingSchema = yup.object({
       lastName: yup.string().required('Last name is required'),
       email: yup.string().email().required('Email is required'),
     }),
-    rooms: yup.array().of(
-      yup.object({
-        rateId: yup.string().required(),
-        adults: yup
-          .number()
-          .min(1, 'At least one guest is required')
-          .required(),
-      })
-    ),
+    rooms: yup
+      .array()
+      .of(
+        yup.object({
+          rateId: yup.string().required(),
+          adults: yup
+            .number()
+            .min(1, 'At least one guest is required')
+            .required(),
+        })
+      )
+      .required(),
   }),
 });
 
 const validate =
-  (schema: yup.BaseSchema) =>
+  (schema: typeof newBookingSchema) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       await schema.validate({
